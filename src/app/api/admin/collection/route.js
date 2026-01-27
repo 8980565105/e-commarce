@@ -1,10 +1,8 @@
-
-
 import { NextResponse } from "next/server";
 import { connectMongoDB } from "@/lib/db";
 import Collection from "../../../../models/collection";
 
-// 1. GET: બધા કલેક્શન મેળવવા
+// 1. GET: Badha collections melvva mate
 export async function GET() {
   try {
     await connectMongoDB();
@@ -15,7 +13,7 @@ export async function GET() {
   }
 }
 
-// 2. POST: નવું કલેક્શન ઉમેરવા
+// 2. POST: Navu collection umerva mate
 export async function POST(request) {
   try {
     await connectMongoDB();
@@ -31,18 +29,18 @@ export async function POST(request) {
     const buffer = Buffer.from(bytes);
     const base64Image = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-    const newCollection = await Collection.create({ title, image: base64Image });
+    // Default status: true (Active)
+    const newCollection = await Collection.create({ title, image: base64Image, status: true });
     return NextResponse.json({ success: true, message: "Created!", data: newCollection });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// 3. DELETE: કલેક્શન ડીલીટ કરવા
+// 3. DELETE: Collection delete karva mate
 export async function DELETE(request) {
   try {
     await connectMongoDB();
-    // URL માંથી ID મેળવવા માટે (દા.ત. /api/admin/collection?id=123)
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
@@ -57,30 +55,48 @@ export async function DELETE(request) {
   }
 }
 
-// 4. PUT (EDIT): કલેક્શન અપડેટ કરવા
+// 4. PUT: Edit Title/Image AND Toggle Status
 export async function PUT(request) {
   try {
     await connectMongoDB();
-    const formData = await request.formData();
-    const id = formData.get("id");
-    const title = formData.get("title");
-    const file = formData.get("image"); // આ ઓપ્શનલ હોઈ શકે (જો યુઝર ઈમેજ ન બદલે તો)
+    
+    const contentType = request.headers.get("content-type");
+    let id, updateData = {};
+
+    // Check if request is JSON (for Status Toggle) or FormData (for Edit)
+    if (contentType && contentType.includes("application/json")) {
+      const body = await request.json();
+      id = body.id;
+      // Status update logic
+      if (body.hasOwnProperty("status")) {
+        updateData.status = body.status;
+      }
+    } else {
+      const formData = await request.formData();
+      id = formData.get("id");
+      const title = formData.get("title");
+      const file = formData.get("image");
+
+      if (title) updateData.title = title;
+
+      // Image processing
+      if (file && typeof file !== "string") {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        updateData.image = `data:${file.type};base64,${buffer.toString("base64")}`;
+      }
+    }
 
     if (!id) {
       return NextResponse.json({ success: false, error: "ID is required" }, { status: 400 });
     }
 
-    let updateData = { title };
+    const updatedCollection = await Collection.findByIdAndUpdate(
+      id, 
+      { $set: updateData }, 
+      { new: true }
+    );
 
-    // જો નવી ઈમેજ અપલોડ કરી હોય તો જ તેને Base64 માં ફેરવો
-    if (file && typeof file !== "string") {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      updateData.image = `data:${file.type};base64,${buffer.toString("base64")}`;
-    }
-
-    const updatedCollection = await Collection.findByIdAndUpdate(id, updateData, { new: true });
-    
     return NextResponse.json({ 
       success: true, 
       message: "Updated Successfully!", 
