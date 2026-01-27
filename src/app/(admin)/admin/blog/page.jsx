@@ -3,12 +3,17 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
-import { ChevronLeft, ChevronRight, BookOpen, Search as SearchIcon } from "lucide-react"; // Search icon add kiya
+import {
+  ChevronLeft,
+  ChevronRight,
+  BookOpen,
+  Search as SearchIcon,
+} from "lucide-react";
 
 export default function BlogListPage() {
   const [blogs, setBlogs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // Search state
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentBlog, setCurrentBlog] = useState({
     title: "",
     content: "",
@@ -28,7 +33,7 @@ export default function BlogListPage() {
       const data = await res.json();
       setBlogs(Array.isArray(data) ? data : []);
     } catch (err) {
-      toast.error("ડેટા લોડ કરવામાં ભૂલ આવી!");
+      toast.error("data load error");
     }
   };
 
@@ -41,12 +46,10 @@ export default function BlogListPage() {
     setEditorLoaded(true);
   }, []);
 
-  // --- SEARCH LOGIC (Only Title) ---
   const filteredBlogs = blogs.filter((blog) =>
-    blog.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    blog.title?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // --- PAGINATION LOGIC (Based on Filtered Data) ---
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
@@ -69,7 +72,9 @@ export default function BlogListPage() {
   const deleteBlog = async (id) => {
     toast((t) => (
       <div className="flex flex-col gap-3">
-        <p className="font-medium">Are you sure you want to delete this blog?</p>
+        <p className="font-medium">
+          Are you sure you want to delete this blog?
+        </p>
         <div className="flex gap-2">
           <button
             onClick={async () => {
@@ -216,21 +221,27 @@ export default function BlogListPage() {
           ))}
         </div>
 
-        {/* --- NO DATA STATE --- */}
         {filteredBlogs.length === 0 && (
           <div className="text-center py-20 bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
             <BookOpen className="w-16 h-16 text-gray-200 mx-auto mb-4" />
             <p className="text-gray-400 font-black uppercase italic tracking-widest">
-              {searchTerm ? `No results for "${searchTerm}"` : "No blogs available"}
+              {searchTerm
+                ? `No results for "${searchTerm}"`
+                : "No blogs available"}
             </p>
           </div>
         )}
 
-        {/* --- PAGINATION --- */}
         {totalPages > 1 && (
           <div className="mt-10 py-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest italic">
-              Showing <span className="text-blue-500">{indexOfFirstBlog + 1}-{Math.min(indexOfLastBlog, filteredBlogs.length)}</span> of <span className="text-blue-500">{filteredBlogs.length}</span> Articles
+              Showing{" "}
+              <span className="text-blue-500">
+                {indexOfFirstBlog + 1}-
+                {Math.min(indexOfLastBlog, filteredBlogs.length)}
+              </span>{" "}
+              of <span className="text-blue-500">{filteredBlogs.length}</span>{" "}
+              Articles
             </p>
 
             <div className="flex items-center gap-2">
@@ -241,7 +252,6 @@ export default function BlogListPage() {
               >
                 <ChevronLeft size={18} />
               </button>
-              {/* Limited page numbers for clean UI */}
               <div className="flex gap-1">
                 {[...Array(totalPages)].map((_, idx) => (
                   <button
@@ -274,24 +284,39 @@ export default function BlogListPage() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-[3rem] w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             <div className="p-8 border-b flex justify-between items-center bg-gray-50/50">
-              <h2 className="text-2xl font-black text-gray-900 uppercase italic tracking-tighter">Edit Article</h2>
-              <button onClick={() => setIsModalOpen(false)} className="w-12 h-12 flex items-center justify-center bg-white rounded-2xl text-gray-400 hover:text-red-500 transition-all shadow-sm">
-                <ChevronRight className="rotate-45" size={24} /> {/* X icon alternative */}
+              <h2 className="text-2xl font-black text-gray-900 uppercase italic tracking-tighter">
+                Edit Article
+              </h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="w-12 h-12 flex items-center justify-center bg-white rounded-2xl text-gray-400 hover:text-red-500 transition-all shadow-sm"
+              >
+                <ChevronRight className="rotate-45" size={24} />{" "}
+                {/* X icon alternative */}
               </button>
             </div>
-            <form onSubmit={handleUpdate} className="p-8 overflow-y-auto flex-1">
+            <form
+              onSubmit={handleUpdate}
+              className="p-8 overflow-y-auto flex-1"
+            >
               <div className="mb-6">
-                <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-[0.2em]">Title</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-[0.2em]">
+                  Title
+                </label>
                 <input
                   type="text"
                   value={currentBlog.title}
-                  onChange={(e) => setCurrentBlog({ ...currentBlog, title: e.target.value })}
+                  onChange={(e) =>
+                    setCurrentBlog({ ...currentBlog, title: e.target.value })
+                  }
                   className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none font-bold"
                   required
                 />
               </div>
               <div className="mb-8">
-                <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-[0.2em]">Content</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-[0.2em]">
+                  Content
+                </label>
                 <div className="rounded-2xl overflow-hidden border border-gray-100">
                   {editorLoaded && (
                     <CKEditor
@@ -299,15 +324,28 @@ export default function BlogListPage() {
                       data={currentBlog.content}
                       config={{ extraPlugins: [customAdapterPlugin] }}
                       onChange={(event, editor) =>
-                        setCurrentBlog({ ...currentBlog, content: editor.getData() })
+                        setCurrentBlog({
+                          ...currentBlog,
+                          content: editor.getData(),
+                        })
                       }
                     />
                   )}
                 </div>
               </div>
               <div className="flex gap-4">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-4 bg-gray-100 rounded-2xl font-black uppercase text-[10px] tracking-widest">Cancel</button>
-                <button type="submit" disabled={isSaving} className="flex-2 py-4 bg-black text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-blue-600 transition-all">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 py-4 bg-gray-100 rounded-2xl font-black uppercase text-[10px] tracking-widest"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="flex-2 py-4 bg-black text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-blue-600 transition-all"
+                >
                   {isSaving ? "Updating..." : "Update Blog"}
                 </button>
               </div>

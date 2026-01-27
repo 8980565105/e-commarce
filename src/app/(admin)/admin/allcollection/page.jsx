@@ -12,17 +12,15 @@ import {
   CirclePlus,
   ChevronLeft,
   ChevronRight,
+  Search,
 } from "lucide-react";
 
 export default function CollectionList() {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // --- Pagination States ---
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-
-  // Modals States
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [editData, setEditData] = useState({ id: "", title: "", image: null });
@@ -48,16 +46,24 @@ export default function CollectionList() {
     fetchCollections();
   }, []);
 
-  // --- Pagination Calculation ---
+  const filteredCollections = collections.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentCollections = collections.slice(
+  const currentCollections = filteredCollections.slice(
     indexOfFirstItem,
     indexOfLastItem,
   );
-  const totalPages = Math.ceil(collections.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredCollections.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -117,10 +123,9 @@ export default function CollectionList() {
     );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-10">
       <Toaster position="top-center" />
 
-      {/* Delete Modal */}
       {isDeleting && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-9999 p-4">
           <div className="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full animate-in zoom-in-95 duration-200">
@@ -151,7 +156,6 @@ export default function CollectionList() {
         </div>
       )}
 
-      {/* Edit Modal */}
       {isEditing && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-9999 p-4">
           <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md animate-in zoom-in-95 duration-200 shadow-2xl">
@@ -199,8 +203,7 @@ export default function CollectionList() {
         </div>
       )}
 
-      {/* Header */}
-      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
           <h2 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">
             Collections
@@ -209,11 +212,26 @@ export default function CollectionList() {
             Manage store categories and visuals
           </p>
         </div>
+
+        <div className="relative flex-1 max-w-md">
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            size={20}
+          />
+          <input
+            type="text"
+            placeholder="Search by title..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl shadow-sm focus:ring-2 ring-blue-500/20 outline-none transition-all font-medium text-gray-700"
+          />
+        </div>
+
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center bg-white px-5 py-3 rounded-2xl border border-gray-100 shadow-sm">
             <LayoutGrid size={20} className="text-blue-600 mr-2" />
             <span className="font-black text-gray-700">
-              {collections.length} Total
+              {filteredCollections.length} Total
             </span>
           </div>
           <Link
@@ -225,9 +243,7 @@ export default function CollectionList() {
         </div>
       </div>
 
-      {/* Main List Box with Shadow */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden">
-        {/* Desktop View */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50/50 border-b border-gray-100">
@@ -263,7 +279,7 @@ export default function CollectionList() {
                       year: "numeric",
                     })}
                   </td>
-                  <td className="px-8 py-5">
+                  <td className="px-8 py-5 text-right">
                     <div className="flex justify-end gap-3">
                       <button
                         onClick={() => {
@@ -291,7 +307,6 @@ export default function CollectionList() {
           </table>
         </div>
 
-        {/* Mobile View */}
         <div className="md:hidden divide-y divide-gray-100">
           {currentCollections.map((item) => (
             <div key={item._id} className="p-6 flex flex-col gap-5">
@@ -306,7 +321,7 @@ export default function CollectionList() {
                     {item.title}
                   </h4>
                   <div className="flex items-center gap-2 text-xs font-bold text-gray-400 mt-1 uppercase tracking-wider">
-                    <Calendar size={14} />
+                    <Calendar size={14} />{" "}
                     {new Date(item.createdAt).toLocaleDateString()}
                   </div>
                 </div>
@@ -335,8 +350,7 @@ export default function CollectionList() {
           ))}
         </div>
 
-        {/* Empty State */}
-        {collections.length === 0 && (
+        {filteredCollections.length === 0 && (
           <div className="text-center py-24 bg-white">
             <LayoutGrid size={48} className="mx-auto text-gray-100 mb-4" />
             <p className="text-gray-400 font-black text-xl">
@@ -345,19 +359,20 @@ export default function CollectionList() {
           </div>
         )}
 
-        {/* --- PAGINATION CONTROLS --- */}
         {totalPages > 1 && (
           <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest italic">
-              Showing {""}
+              Showing{" "}
               <span className="text-blue-500">
                 {indexOfFirstItem + 1}-
-                {Math.min(indexOfLastItem, collections.length)}{" "}
+                {Math.min(indexOfLastItem, filteredCollections.length)}{" "}
               </span>
-              of <span className="text-blue-500">{collections.length}</span>{" "}
+              of{" "}
+              <span className="text-blue-500">
+                {filteredCollections.length}
+              </span>{" "}
               Categories
             </p>
-
             <div className="flex items-center gap-2">
               <button
                 onClick={() => paginate(currentPage - 1)}
@@ -366,23 +381,17 @@ export default function CollectionList() {
               >
                 <ChevronLeft size={18} />
               </button>
-
               <div className="flex gap-1">
                 {[...Array(totalPages)].map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => paginate(idx + 1)}
-                    className={`w-10 h-10 rounded-lg font-bold text-xs transition-all ${
-                      currentPage === idx + 1
-                        ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-                        : "bg-white border border-gray-200 text-gray-500 hover:border-blue-400"
-                    }`}
+                    className={`w-10 h-10 rounded-lg font-bold text-xs transition-all ${currentPage === idx + 1 ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "bg-white border border-gray-200 text-gray-500 hover:border-blue-400"}`}
                   >
                     {idx + 1}
                   </button>
                 ))}
               </div>
-
               <button
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === totalPages}
