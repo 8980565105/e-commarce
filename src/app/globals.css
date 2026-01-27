@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* formatting styles */
+.product-html-content {
+  white-space: pre-wrap; /* Spaces aur line breaks dikhane ke liye */
+}
+
+.product-html-content b, .product-html-content strong {
+  font-weight: bold;
+}
+
+.product-html-content i, .product-html-content em {
+  font-style: italic;
+}
+
+.product-html-content ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
