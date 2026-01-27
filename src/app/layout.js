@@ -6,11 +6,11 @@ import { CartProvider } from "@/context/cartcontext";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <CartProvider>
           <HeaderSwitcher />
           {children}
-          <Footerswitch/>
+          <Footerswitch />
         </CartProvider>
       </body>
     </html>
