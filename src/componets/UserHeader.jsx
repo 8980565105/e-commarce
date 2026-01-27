@@ -75,7 +75,7 @@ export default function UserHeader() {
           </Link>
         </div>
 
-        <div className="hidden lg:flex items-center gap-10 text-[#1A2B49] font-bold uppercase tracking-widest text-[11px]">
+        <div className="hidden lg:flex items-center gap-10 text-[#1A2B49] font-bold uppercase tracking-widest text-lg">
           <Link href="/" className="hover:text-red-500 transition">
             Home
           </Link>

@@ -61,7 +61,7 @@ function AllCollectionPage() {
       </section>
 
       {/* --- 2. COLLECTION GRID SECTION --- */}
-      <section className="py-20 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+      <section className="py-20 px-6 md:px-12 lg:px-6 max-w-7xl mx-auto">
         
         {/* Header Title */}
         <div className="mb-16">
