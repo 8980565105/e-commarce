@@ -2,20 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react"; // Import for clean icons
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function BlogListingPage() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // --- Pagination States ---
   const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 9; // Show 9 blogs
+  const blogsPerPage = 9;
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await fetch("/api/blog", { cache: "no-store" });
+        const res = await fetch("/api/blog?admin=false", { cache: "no-store" });
         const data = await res.json();
         setBlogs(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -30,12 +29,14 @@ export default function BlogListingPage() {
   // --- Pagination Logic ---
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+
+  // અત્યારે જે પેજ પર હોઈએ તેના 9 બ્લોગ્સ
   const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
   const totalPages = Math.ceil(blogs.length / blogsPerPage);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
-    window.scrollTo({ top: 500, behavior: "smooth" }); // Scroll to grid top on change
+    window.scrollTo({ top: 500, behavior: "smooth" });
   };
 
   const getFirstImage = (htmlContent) => {
@@ -52,9 +53,8 @@ export default function BlogListingPage() {
 
   if (loading)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-xl font-medium text-gray-500">Loading Blogs...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
 
@@ -68,33 +68,31 @@ export default function BlogListingPage() {
         >
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
-
-        <div className="relative z-10 max-w-3xl">
-          <span className="text-white text-20 font-bold text-xs uppercase tracking-[0.3em]">
+        <div className="relative z-10 max-w-3xl text-white">
+          <span className="font-bold text-xs uppercase tracking-[0.3em]">
             Welcome to Fashion
           </span>
-          <h1 className="text-4xl md:text-60 font-black text-white mt-4 uppercase tracking-tighter">
+          <h1 className="text-4xl md:text-6xl font-black mt-4 uppercase tracking-tighter">
             Clothes Fashion Blog
           </h1>
-          <p className="text-gray-200 font-medium mt-6 text-sm md:text-20 leading-relaxed">
-            Explore Our curated collection of stylish clothing and accessories
-            tailored to your unique taste.
+          <p className="font-medium mt-6 text-sm md:text-lg leading-relaxed opacity-90">
+            Explore our curated collection of stylish clothing and accessories.
           </p>
         </div>
       </section>
 
       {/* Blog Grid Section */}
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-          Latest Blog
+        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800 uppercase italic">
+          Latest Stories
         </h2>
 
         {/* 9 Blogs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {currentBlogs.map((blog) => (
             <div
               key={blog._id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col"
+              className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col"
             >
               <div className="h-64 overflow-hidden relative">
                 <img
@@ -104,12 +102,11 @@ export default function BlogListingPage() {
                 />
               </div>
 
-              <div className="p-6 flex flex-col grow">
-                <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                  <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-bold uppercase tracking-wider">
-                    Fashion
-                  </span>
-                  <span className="font-medium">
+              <div className="p-8 flex flex-col grow">
+                <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4">
+                  <span className="text-purple-600">Fashion</span>
+                  <span>•</span>
+                  <span>
                     {new Date(blog.createdAt).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
@@ -119,22 +116,22 @@ export default function BlogListingPage() {
                 </div>
 
                 <Link href={`/blog/${blog._id}`}>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 hover:text-purple-600 transition-colors line-clamp-2 leading-snug">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 hover:text-purple-600 transition-colors line-clamp-2 leading-tight uppercase italic">
                     {blog.title}
                   </h3>
                 </Link>
 
-                <p className="text-gray-600 mb-6 line-clamp-3 text-sm leading-relaxed">
-                  {blog.content.replace(/<[^>]*>?/gm, "").substring(0, 150)}...
+                <p className="text-gray-500 text-sm mb-6 line-clamp-3 leading-relaxed">
+                  {blog.content.replace(/<[^>]*>?/gm, "").substring(0, 120)}...
                 </p>
 
                 <div className="mt-auto">
                   <Link
                     href={`/blog/${blog._id}`}
-                    className="inline-flex items-center text-purple-600 font-bold hover:gap-3 transition-all duration-200 group"
+                    className="inline-flex items-center text-xs font-black uppercase tracking-widest text-purple-600 group"
                   >
-                    READ MORE{" "}
-                    <span className="ml-2 group-hover:translate-x-1 transition-transform">
+                    Read Story{" "}
+                    <span className="ml-2 group-hover:translate-x-2 transition-transform">
                       →
                     </span>
                   </Link>
@@ -144,13 +141,13 @@ export default function BlogListingPage() {
           ))}
         </div>
 
-        {/* --- CENTERED PAGINATION --- */}
+        {/* --- PAGINATION CONTROLS --- */}
         {blogs.length > blogsPerPage && (
-          <div className="mt-16 flex justify-center items-center gap-2">
+          <div className="mt-20 flex justify-center items-center gap-3">
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-gray-300 hover:bg-purple-600 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-current transition-all"
+              className="p-3 rounded-xl border border-gray-200 hover:bg-purple-600 hover:text-white disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-current transition-all bg-white"
             >
               <ChevronLeft size={20} />
             </button>
@@ -160,10 +157,10 @@ export default function BlogListingPage() {
                 <button
                   key={idx}
                   onClick={() => paginate(idx + 1)}
-                  className={`w-10 h-10 rounded-lg font-bold transition-all ${
+                  className={`w-12 h-12 rounded-xl font-black text-xs transition-all ${
                     currentPage === idx + 1
-                      ? "bg-purple-600 text-white shadow-lg shadow-purple-200"
-                      : "bg-white border border-gray-300 text-gray-600 hover:border-purple-600"
+                      ? "bg-purple-600 text-white shadow-xl shadow-purple-100"
+                      : "bg-white border border-gray-200 text-gray-400 hover:border-purple-600 hover:text-purple-600"
                   }`}
                 >
                   {idx + 1}
@@ -174,7 +171,7 @@ export default function BlogListingPage() {
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-gray-300 hover:bg-purple-600 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-current transition-all"
+              className="p-3 rounded-xl border border-gray-200 hover:bg-purple-600 hover:text-white disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-current transition-all bg-white"
             >
               <ChevronRight size={20} />
             </button>
@@ -183,8 +180,8 @@ export default function BlogListingPage() {
 
         {blogs.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-400 text-xl font-medium">
-              No blogs found at the moment.
+            <p className="text-gray-400 text-lg font-bold uppercase tracking-widest">
+              No blogs published yet.
             </p>
           </div>
         )}
