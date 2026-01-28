@@ -201,7 +201,7 @@ export default function ProductList() {
 
       {/* --- DELETE CONFIRMATION MODAL (Center) --- */}
       {isDeleting && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[200] p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-200 p-4">
           <div className="bg-white rounded-4xl p-8 max-w-sm w-full animate-in zoom-in-95 duration-200 shadow-2xl text-center">
             <div className="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <AlertCircle size={32} />
@@ -228,7 +228,7 @@ export default function ProductList() {
 
       {/* --- EDIT MODAL --- */}
       {isEditing && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-3 md:p-6">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100 p-3 md:p-6">
           <div className="bg-white rounded-4xl p-6 md:p-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-gray-100">
             <button onClick={() => setIsEditing(false)} className="absolute right-8 top-8 text-gray-400 hover:text-red-500 p-2 bg-gray-50 rounded-full">
               <X size={20} />
