@@ -304,13 +304,14 @@ export default function BlogListPage() {
         {/* --- PAGINATION --- */}
         {totalPages > 1 && (
           <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest italic">
               Showing{" "}
-              <span className="text-black">
+              <span className="text-blue-500">
                 {indexOfFirstBlog + 1} -{" "}
                 {Math.min(indexOfLastBlog, filteredBlogs.length)}
               </span>{" "}
-              of {filteredBlogs.length}
+              of
+              <span className="text-blue-500"> {filteredBlogs.length}</span> artical
             </p>
             <div className="flex gap-2">
               <button

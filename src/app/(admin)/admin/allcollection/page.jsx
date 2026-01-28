@@ -319,7 +319,7 @@ export default function CollectionList() {
       {/* </div> */}
 
       {/* --- TABLE AREA --- */}
-      <div className="bg-white rounded-4xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
         <div className="hidden lg:block">
           <table className="w-full text-left">
             <thead className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-[2px] border-b border-gray-100">
@@ -481,7 +481,7 @@ export default function CollectionList() {
                 {Math.min(indexOfLastItem, filteredCollections.length)}
               </span>{" "}
               of <span className="text-blue-500">{collections.length}</span>{" "}
-              Categories
+              collection
             </p>
             <div className="flex items-center gap-2">
               <button

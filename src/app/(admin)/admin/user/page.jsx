@@ -105,7 +105,7 @@ export default function UserList() {
       </div>
 
       {/* --- TABLE SECTION --- */}
-      <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>

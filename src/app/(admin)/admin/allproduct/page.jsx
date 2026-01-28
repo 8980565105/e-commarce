@@ -451,7 +451,7 @@ export default function ProductList() {
       </div>
 
       {/* --- TABLE AREA --- */}
-      <div className="bg-white rounded-4xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
         <div className="hidden lg:block overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-[2px] border-b border-gray-100">
@@ -608,7 +608,7 @@ export default function ProductList() {
                 {indexOfFirstItem + 1} -{" "}
                 {Math.min(indexOfLastItem, filteredProducts.length)}
               </span>{" "}
-              of <span className="text-blue-500">{products.length}</span>
+              of <span className="text-blue-500">{products.length}</span> product
             </p>
             <div className="flex items-center gap-2">
               <button

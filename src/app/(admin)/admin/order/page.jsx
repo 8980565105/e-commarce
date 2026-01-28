@@ -140,7 +140,7 @@ export default function AdminOrderPage() {
           </div>
         ) : (
           <>
-            <div className="hidden md:block bg-white rounded-3xl shadow-xl shadow-gray-200/40 border border-gray-100 overflow-hidden">
+            <div className="hidden md:block bg-white rounded-xl shadow-xl shadow-gray-200/40 border border-gray-100 overflow-hidden">
               <table className="w-full text-left">
                 <thead className="bg-gray-50/50 border-b border-gray-100">
                   <tr>
