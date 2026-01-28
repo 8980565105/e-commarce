@@ -84,7 +84,7 @@ export default function BlogListingPage() {
       {/* Blog Grid Section */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-800 uppercase italic">
-          Latest Stories
+          Latest artical
         </h2>
 
         {/* 9 Blogs Grid */}
@@ -189,3 +189,4 @@ export default function BlogListingPage() {
     </div>
   );
 }
+  

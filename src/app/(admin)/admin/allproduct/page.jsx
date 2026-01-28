@@ -608,8 +608,10 @@ export default function ProductList() {
                 {indexOfFirstItem + 1} -{" "}
                 {Math.min(indexOfLastItem, filteredProducts.length)}
               </span>{" "}
-              of <span className="text-blue-500">{products.length}</span> product
+              of <span className="text-blue-500">{products.length}</span>{" "}
+              product
             </p>
+
             <div className="flex items-center gap-2">
               <button
                 onClick={() => paginate(currentPage - 1)}
@@ -637,6 +639,7 @@ export default function ProductList() {
                 <ChevronRight size={18} />
               </button>
             </div>
+            
           </div>
         )}
       </div>
