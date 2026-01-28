@@ -166,7 +166,7 @@ export default function Footer() {
 
 const ServiceItem = ({ icon, title, desc }) => (
   <div className="flex flex-col items-center text-center space-y-2 group">
-    <div className="text-[#FF4D59] group-hover:scale-110 transition-transform duration-300">
+    <div className="text-[#FF4D59] transition-transform duration-300">
       {icon}
     </div>
     <h4 className="text-sm font-bold text-gray-900">{title}</h4>
