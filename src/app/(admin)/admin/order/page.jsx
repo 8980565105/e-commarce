@@ -273,7 +273,7 @@ export default function AdminOrderPage() {
       {/* Modal - Remains same as your code but with proper conditional checks */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/70 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-3xl rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl flex flex-col max-h-[95vh] overflow-hidden">
+          <div className="bg-white w-full max-w-3xl rounded-xl shadow-2xl flex flex-col max-h-[95vh] overflow-hidden">
             <div className="p-8 border-b flex justify-between items-center bg-white">
               <h2 className="text-2xl font-black text-gray-900 uppercase italic">
                 Transaction Details
@@ -288,7 +288,7 @@ export default function AdminOrderPage() {
             <div className="p-8 overflow-y-auto">
               {/* ... (Rest of your Modal Content) ... */}
               <div className="grid md:grid-cols-2 gap-8 mb-8">
-                <div className="bg-gray-50 p-6 rounded-3xl border">
+                <div className="bg-gray-50 p-6 rounded-xl border">
                   <h3 className="text-[10px] font-black text-blue-600 uppercase mb-4">
                     Customer Info
                   </h3>
@@ -307,7 +307,7 @@ export default function AdminOrderPage() {
                     {selectedOrder.customerInfo?.address}
                   </p>
                 </div>
-                <div className="bg-blue-600 p-6 rounded-3xl text-white">
+                <div className="bg-blue-600 p-6 rounded-xl text-white">
                   <p className="text-[10px] font-bold uppercase opacity-70">
                     Total Amount
                   </p>
@@ -320,7 +320,7 @@ export default function AdminOrderPage() {
                 {selectedOrder.items?.map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between p-3 border rounded-2xl"
+                    className="flex items-center justify-between p-3 border rounded-xl"
                   >
                     <div className="flex items-center gap-3">
                       <img

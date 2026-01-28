@@ -240,7 +240,7 @@ export default function ProductList() {
       {/* --- EDIT MODAL --- */}
       {isEditing && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100 p-3 md:p-6">
-          <div className="bg-white rounded-4xl p-6 md:p-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-gray-100">
+          <div className="bg-white rounded-xl p-6 md:p-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-gray-100">
             <button
               onClick={() => setIsEditing(false)}
               className="absolute right-8 top-8 text-gray-400 hover:text-red-500 p-2 bg-gray-50 rounded-full"
@@ -639,7 +639,7 @@ export default function ProductList() {
                 <ChevronRight size={18} />
               </button>
             </div>
-            
+
           </div>
         )}
       </div>

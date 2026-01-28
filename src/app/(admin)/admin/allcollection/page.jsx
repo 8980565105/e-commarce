@@ -204,7 +204,7 @@ export default function CollectionList() {
       {/* --- EDIT MODAL --- */}
       {isEditing && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100 p-4">
-          <div className="bg-white rounded-4xl p-8 md:p-10 w-full max-w-md animate-in zoom-in-95 duration-200 shadow-2xl border border-gray-100 relative">
+          <div className="bg-white rounded-xl p-8 md:p-10 w-full max-w-md animate-in zoom-in-95 duration-200 shadow-2xl border border-gray-100 relative">
             <button
               onClick={() => setIsEditing(false)}
               className="absolute right-6 top-6 text-gray-400 hover:text-red-500 p-2 bg-gray-50 rounded-full transition-colors"

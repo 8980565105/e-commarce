@@ -744,7 +744,7 @@ export default function BlogListPage() {
       {/* --- EDIT MODAL --- */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-[#1E293B]/60 backdrop-blur-md flex items-center justify-center z-100 p-4">
-          <div className="bg-white rounded-[3rem] w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border-8 border-white">
+          <div className="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border-8 border-white">
             <div className="p-8 border-b flex justify-between items-center bg-[#F8FAFC]">
               <h2 className="text-2xl font-black text-[#1E293B] uppercase tracking-tighter italic">
                 Edit Article
