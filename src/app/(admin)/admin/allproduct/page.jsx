@@ -8,14 +8,13 @@ import {
   Edit3,
   Trash2,
   Package,
-  Layers,
   IndianRupee,
   X,
   Camera,
   CirclePlus,
   ChevronLeft,
   ChevronRight,
-  Calendar,
+  AlertCircle,
 } from "lucide-react";
 
 const CKEditorComponent = dynamic(
@@ -34,8 +33,11 @@ export default function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
+  // --- Modal States ---
   const [isEditing, setIsEditing] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false); // Delete Modal State
+  const [deleteId, setDeleteId] = useState(null); // ID to be deleted
 
   useEffect(() => {
     setEditorLoaded(true);
@@ -69,41 +71,41 @@ export default function ProductList() {
       p.category?.title?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // Pagination calculation
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredProducts.slice(
-    indexOfFirstItem,
-    indexOfLastItem,
-  );
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Reset to page 1 when searching
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure?")) return;
-    const toastId = toast.loading("Deleting...");
+  // --- DELETE HANDLER (Final Action) ---
+  const confirmDelete = async () => {
+    if (!deleteId) return;
+    const toastId = toast.loading("Deleting product...");
+    setIsDeleting(false); // Modal બંધ કરો
+
     try {
       const res = await fetch("/api/admin/product", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id: deleteId }),
       });
       const result = await res.json();
       if (result.success) {
-        toast.success("Deleted!", { id: toastId });
-        setProducts((prev) => prev.filter((p) => p._id !== id));
+        toast.success("Product Deleted Successfully!", { id: toastId });
+        setProducts((prev) => prev.filter((p) => p._id !== deleteId));
       } else {
         toast.error(result.error, { id: toastId });
       }
     } catch (error) {
       toast.error("Failed to delete", { id: toastId });
+    } finally {
+      setDeleteId(null);
     }
   };
 
@@ -167,25 +169,17 @@ export default function ProductList() {
 
   const toggleStatus = async (id, currentStatus) => {
     const toastId = toast.loading("Updating status...");
-
     try {
       const res = await fetch("/api/admin/product", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id,
-          status: !currentStatus,
-        }),
+        body: JSON.stringify({ id, status: !currentStatus }),
       });
-
       const result = await res.json();
-
       if (result.success) {
         toast.success("Status updated", { id: toastId });
         setProducts((prev) =>
-          prev.map((p) =>
-            p._id === id ? { ...p, status: !currentStatus } : p,
-          ),
+          prev.map((p) => (p._id === id ? { ...p, status: !currentStatus } : p))
         );
       }
     } catch {
@@ -197,239 +191,137 @@ export default function ProductList() {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-white gap-4">
         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        <p className="font-black text-gray-400 text-xs tracking-widest uppercase">
-          Loading products...
-        </p>
+        <p className="font-black text-gray-400 text-xs tracking-widest uppercase">Loading products...</p>
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-black">
+    <div className="min-h-screen bg-[#F8FAFC] text-black p-4 md:p-6">
       <Toaster position="top-center" />
+
+      {/* --- DELETE CONFIRMATION MODAL (Center) --- */}
+      {isDeleting && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[200] p-4">
+          <div className="bg-white rounded-4xl p-8 max-w-sm w-full animate-in zoom-in-95 duration-200 shadow-2xl text-center">
+            <div className="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <AlertCircle size={32} />
+            </div>
+            <h3 className="text-xl font-black text-gray-900 tracking-tight">Delete Product?</h3>
+            <p className="text-gray-500 mt-2 text-sm font-medium">This action cannot be undone. Product will be permanently removed.</p>
+            <div className="flex gap-3 mt-8">
+              <button
+                onClick={() => setIsDeleting(false)}
+                className="flex-1 py-4 bg-gray-100 rounded-2xl font-black text-gray-500 hover:bg-gray-200 transition-all uppercase text-[10px] tracking-widest"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 py-4 bg-red-500 text-white rounded-2xl font-black shadow-lg shadow-red-100 hover:bg-red-600 transition-all uppercase text-[10px] tracking-widest"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* --- EDIT MODAL --- */}
       {isEditing && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100 p-3 md:p-6">
-          <div className="bg-white rounded-4xl p-6 md:p-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative shadow-2xl animate-in zoom-in-95 duration-200 border border-gray-100">
-            <button
-              onClick={() => setIsEditing(false)}
-              className="absolute right-8 top-8 text-gray-400 hover:text-red-500 transition-colors z-10 p-2 bg-gray-50 rounded-full"
-            >
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-3 md:p-6">
+          <div className="bg-white rounded-4xl p-6 md:p-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-gray-100">
+            <button onClick={() => setIsEditing(false)} className="absolute right-8 top-8 text-gray-400 hover:text-red-500 p-2 bg-gray-50 rounded-full">
               <X size={20} />
             </button>
-
-            <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 tracking-tight">
-              Edit Product
-            </h3>
-
+            <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 tracking-tight">Edit Product</h3>
             <form onSubmit={handleUpdate} className="space-y-6">
               <div className="flex justify-center mb-8">
                 <div className="relative group w-32 h-32">
-                  <img
-                    src={editProduct.images[0]}
-                    className="w-full h-full rounded-4xl object-cover border-4 border-white shadow-xl group-hover:scale-105 transition-transform duration-300"
-                    alt=""
-                  />
-                  <label className="absolute inset-0 bg-black/40 rounded-4xl opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-all text-white backdrop-blur-[2px]">
+                  <img src={editProduct.images[0]} className="w-full h-full rounded-4xl object-cover border-4 border-white shadow-xl" alt="" />
+                  <label className="absolute inset-0 bg-black/40 rounded-4xl opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer text-white backdrop-blur-[2px]">
                     <Camera size={24} />
-                    <span className="text-[10px] font-black mt-2 tracking-widest">
-                      CHANGE
-                    </span>
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleImageUpload(e.target.files[0])}
-                    />
+                    <span className="text-[10px] font-black mt-2 tracking-widest">CHANGE</span>
+                    <input type="file" className="hidden" onChange={(e) => handleImageUpload(e.target.files[0])} />
                   </label>
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-                    Title
-                  </label>
-                  <input
-                    className="w-full p-4 bg-gray-50 rounded-2xl font-bold border-2 border-transparent focus:border-blue-500/20 focus:bg-white outline-none transition-all"
-                    value={editProduct.title}
-                    onChange={(e) =>
-                      setEditProduct({ ...editProduct, title: e.target.value })
-                    }
-                    required
-                  />
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Title</label>
+                  <input className="w-full p-4 bg-gray-50 rounded-2xl font-bold outline-none border-2 border-transparent focus:border-blue-500/20" value={editProduct.title} onChange={(e) => setEditProduct({ ...editProduct, title: e.target.value })} required />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-                    Category
-                  </label>
-                  <select
-                    className="w-full p-4 bg-gray-50 rounded-2xl font-bold border-2 border-transparent focus:border-blue-500/20 focus:bg-white outline-none appearance-none"
-                    value={editProduct.category}
-                    onChange={(e) =>
-                      setEditProduct({
-                        ...editProduct,
-                        category: e.target.value,
-                      })
-                    }
-                  >
-                    {collections.map((c) => (
-                      <option key={c._id} value={c._id}>
-                        {c.title}
-                      </option>
-                    ))}
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Category</label>
+                  <select className="w-full p-4 bg-gray-50 rounded-2xl font-bold outline-none appearance-none" value={editProduct.category} onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })}>
+                    {collections.map((c) => (<option key={c._id} value={c._id}>{c.title}</option>))}
                   </select>
                 </div>
               </div>
-
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-                  Description
-                </label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Description</label>
                 <div className="rounded-2xl overflow-hidden border-2 border-gray-50">
                   {editorLoaded && (
                     <CKEditorComponent
                       editor={require("@ckeditor/ckeditor5-build-classic")}
                       data={editProduct.description}
-                      onChange={(event, editor) =>
-                        setEditProduct({
-                          ...editProduct,
-                          description: editor.getData(),
-                        })
-                      }
+                      onChange={(event, editor) => setEditProduct({ ...editProduct, description: editor.getData() })}
                     />
                   )}
                 </div>
               </div>
-
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-                  Base Price (₹)
-                </label>
-                <input
-                  type="number"
-                  className="w-full p-4 bg-blue-50/50 rounded-2xl font-black text-blue-600 text-xl outline-none border-2 border-transparent focus:border-blue-500/20"
-                  value={editProduct.price}
-                  onChange={(e) =>
-                    setEditProduct({ ...editProduct, price: e.target.value })
-                  }
-                />
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Base Price (₹)</label>
+                <input type="number" className="w-full p-4 bg-blue-50/50 rounded-2xl font-black text-blue-600 text-xl outline-none border-2 border-transparent focus:border-blue-500/20" value={editProduct.price} onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })} />
               </div>
-
               <div className="space-y-4">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-                  Inventory & Variants
-                </label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Inventory & Variants</label>
                 <div className="grid grid-cols-1 gap-3">
                   {editProduct.variants.map((v, i) => (
-                    <div
-                      key={i}
-                      className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100"
-                    >
-                      <div>
-                        <p className="text-[8px] font-black text-gray-400 mb-1">
-                          SIZE
-                        </p>
-                        <input
-                          className="w-full bg-white p-3 rounded-xl font-bold text-sm outline-none border border-gray-100"
-                          value={v.size}
-                          onChange={(e) =>
-                            updateVariant(i, "size", e.target.value)
-                          }
-                        />
+                    <div key={i} className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                      <div><p className="text-[8px] font-black text-gray-400 mb-1 uppercase">Size</p>
+                        <input className="w-full bg-white p-3 rounded-xl font-bold text-sm outline-none border border-gray-100" value={v.size} onChange={(e) => updateVariant(i, "size", e.target.value)} />
                       </div>
-                      <div>
-                        <p className="text-[8px] font-black text-gray-400 mb-1">
-                          STOCK
-                        </p>
-                        <input
-                          type="number"
-                          className="w-full bg-white p-3 rounded-xl font-bold text-sm outline-none border border-gray-100"
-                          value={v.stock}
-                          onChange={(e) =>
-                            updateVariant(i, "stock", Number(e.target.value))
-                          }
-                        />
+                      <div><p className="text-[8px] font-black text-gray-400 mb-1 uppercase">Stock</p>
+                        <input type="number" className="w-full bg-white p-3 rounded-xl font-bold text-sm outline-none border border-gray-100" value={v.stock} onChange={(e) => updateVariant(i, "stock", Number(e.target.value))} />
                       </div>
-                      <div>
-                        <p className="text-[8px] font-black text-gray-400 mb-1">
-                          PRICE
-                        </p>
-                        <input
-                          type="number"
-                          className="w-full bg-white p-3 rounded-xl font-black text-sm text-blue-600 outline-none border border-gray-100"
-                          value={v.variantPrice || ""}
-                          onChange={(e) =>
-                            updateVariant(i, "variantPrice", e.target.value)
-                          }
-                        />
+                      <div><p className="text-[8px] font-black text-gray-400 mb-1 uppercase">Price</p>
+                        <input type="number" className="w-full bg-white p-3 rounded-xl font-black text-sm text-blue-600 outline-none border border-gray-100" value={v.variantPrice || ""} onChange={(e) => updateVariant(i, "variantPrice", e.target.value)} />
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-
               <div className="flex flex-col md:flex-row gap-4 pt-6">
-                <button
-                  type="submit"
-                  className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black shadow-xl shadow-blue-200 hover:bg-black transition-all"
-                >
-                  SAVE CHANGES
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="flex-1 py-4 bg-gray-100 text-gray-500 rounded-2xl font-black hover:bg-gray-200 transition-all"
-                >
-                  CANCEL
-                </button>
+                <button type="submit" className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black shadow-xl shadow-blue-200 hover:bg-black transition-all">SAVE CHANGES</button>
+                <button type="button" onClick={() => setIsEditing(false)} className="flex-1 py-4 bg-gray-100 text-gray-500 rounded-2xl font-black hover:bg-gray-200 transition-all">CANCEL</button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* --- TOP HEADER & SEARCH --- */}
+      {/* --- HEADER --- */}
       <div className="mb-4 flex flex-col md:flex-row justify-between items-center gap-6 p-6">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
-            <Package size={28} />
-          </div>
+          <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><Package size={28} /></div>
           <div>
-            <h2 className="text-2xl font-black text-gray-900 tracking-tight">
-              Products
-            </h2>
-            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">
-              {filteredProducts.length} Items Listed
-            </p>
+            <h2 className="text-2xl font-black text-gray-900 tracking-tight">Products</h2>
+            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">{filteredProducts.length} Items Listed</p>
           </div>
         </div>
-
         <div className="flex flex-1 max-w-2xl gap-4 w-full">
           <div className="relative flex-1">
-            <Search
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300"
-              size={20}
-            />
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="w-full h-14 pl-14 pr-6 bg-gray-200 border-none rounded-2xl focus:ring-4 ring-blue-500/5 font-bold transition-all placeholder:text-gray-300"
-              onChange={handleSearch}
-            />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+            <input type="text" placeholder="Search products..." className="w-full h-14 pl-14 pr-6 bg-gray-200 border-none rounded-2xl focus:ring-4 ring-blue-500/5 font-bold transition-all" onChange={handleSearch} />
           </div>
-
-          <Link
-            href="/admin/product"
-            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-200 transition duration-200"
-          >
+          <Link href="/admin/product" className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-200 transition duration-200">
             <CirclePlus size={20} /> ADD Product
           </Link>
         </div>
       </div>
 
-      {/* --- PRODUCT LIST AREA --- */}
+      {/* --- TABLE AREA --- */}
       <div className="bg-white rounded-4xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
-        {/* Desktop Table */}
         <div className="hidden lg:block overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-[2px] border-b border-gray-100">
@@ -438,76 +330,34 @@ export default function ProductList() {
                 <th className="px-8 py-6">Category</th>
                 <th className="px-8 py-6">Price</th>
                 <th className="px-8 py-6">Inventory</th>
-                <th className="px-8 py-6">status</th>
+                <th className="px-8 py-6">Status</th>
                 <th className="px-10 py-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {currentItems.map((product) => (
-                <tr
-                  key={product._id}
-                  className="hover:bg-blue-50/10 transition-all group"
-                >
+                <tr key={product._id} className="hover:bg-blue-50/10 transition-all group">
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-5">
-                      <img
-                        src={product.images[0]}
-                        className="h-16 w-16  object-cover ring-4 ring-gray-50 group-hover:ring-blue-50 transition-all"
-                        alt=""
-                      />
+                      <img src={product.images[0]} className="h-16 w-16 object-cover rounded-2xl ring-4 ring-gray-50" alt="" />
                       <div>
-                        <p className="font-black text-gray-800 text-lg line-clamp-1">
-                          {product.title}
-                        </p>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-                          ID: {product._id.slice(-6)}
-                        </p>
+                        <p className="font-black text-gray-800 text-lg line-clamp-1">{product.title}</p>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">ID: {product._id.slice(-6)}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-8 py-6 font-black text-gray-400 text-xs uppercase tracking-tighter">
-                    <span className="bg-gray-100 px-3 py-1 rounded-lg">
-                      {product.category?.title}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6 font-black text-gray-900 text-lg">
-                    ₹{product.price}
-                  </td>
+                  <td className="px-8 py-6 font-black text-gray-400 text-xs uppercase"><span className="bg-gray-100 px-3 py-1 rounded-lg">{product.category?.title}</span></td>
+                  <td className="px-8 py-6 font-black text-gray-900 text-lg">₹{product.price}</td>
+                  <td className="px-8 py-6"><div className="flex items-center gap-2 font-black text-gray-600"><div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>{product.variants?.reduce((acc, v) => acc + v.stock, 0)} Units</div></td>
                   <td className="px-8 py-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                      <span className="font-black text-gray-600">
-                        {product.variants?.reduce((acc, v) => acc + v.stock, 0)}{" "}
-                        Units
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <button
-                      onClick={() => toggleStatus(product._id, product.status)}
-                      className={`px-4 py-2 rounded-full text-xs font-black transition-all ${
-                        product.status
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-600"
-                      }`}
-                    >
+                    <button onClick={() => toggleStatus(product._id, product.status)} className={`px-4 py-2 rounded-full text-xs font-black transition-all ${product.status ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
                       {product.status ? "ACTIVE" : "INACTIVE"}
                     </button>
                   </td>
                   <td className="px-10 py-6 text-right">
                     <div className="flex justify-end gap-3">
-                      <button
-                        onClick={() => handleEditClick(product)}
-                        className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"
-                      >
-                        <Edit3 size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(product._id)}
-                        className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition-all"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      <button onClick={() => handleEditClick(product)} className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><Edit3 size={18} /></button>
+                      <button onClick={() => { setDeleteId(product._id); setIsDeleting(true); }} className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition-all"><Trash2 size={18} /></button>
                     </div>
                   </td>
                 </tr>
@@ -519,108 +369,45 @@ export default function ProductList() {
         {/* Mobile View */}
         <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
           {currentItems.map((product) => (
-            <div
-              key={product._id}
-              className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5"
-            >
+            <div key={product._id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5">
               <div className="flex gap-4">
-                <img
-                  src={product.images[0]}
-                  className="h-24 w-24 rounded-3xl object-cover shadow-md"
-                  alt=""
-                />
+                <img src={product.images[0]} className="h-24 w-24 rounded-3xl object-cover shadow-md" alt="" />
                 <div className="flex-1">
-                  <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">
-                    {product.category?.title}
-                  </span>
-                  <h4 className="font-black text-gray-900 text-lg leading-tight mt-1">
-                    {product.title}
-                  </h4>
-                  <p className="text-xl font-black text-gray-900 mt-2">
-                    ₹{product.price}
-                  </p>
+                  <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{product.category?.title}</span>
+                  <h4 className="font-black text-gray-900 text-lg mt-1 leading-tight">{product.title}</h4>
+                  <p className="text-xl font-black text-gray-900 mt-2">₹{product.price}</p>
                 </div>
               </div>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
-                <div className="flex items-center gap-2 font-black text-gray-500 text-xs uppercase">
-                  <Package size={16} /> Stock:{" "}
-                  {product.variants?.reduce((acc, v) => acc + v.stock, 0)}
-                </div>
+                <div className="flex items-center gap-2 font-black text-gray-500 text-xs uppercase"><Package size={16} /> Stock: {product.variants?.reduce((acc, v) => acc + v.stock, 0)}</div>
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEditClick(product)}
-                    className="w-10 h-10 flex items-center justify-center bg-white border border-gray-100 text-blue-600 rounded-xl shadow-sm"
-                  >
-                    <Edit3 size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(product._id)}
-                    className="w-10 h-10 flex items-center justify-center bg-white border border-gray-100 text-red-500 rounded-xl shadow-sm"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  <button onClick={() => handleEditClick(product)} className="w-10 h-10 flex items-center justify-center bg-white border border-gray-100 text-blue-600 rounded-xl"><Edit3 size={18} /></button>
+                  <button onClick={() => { setDeleteId(product._id); setIsDeleting(true); }} className="w-10 h-10 flex items-center justify-center bg-white border border-gray-100 text-red-500 rounded-xl"><Trash2 size={18} /></button>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Empty State */}
         {filteredProducts.length === 0 && (
           <div className="py-32 text-center bg-white">
-            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
-              <Search size={32} />
-            </div>
-            <p className="text-gray-400 font-black text-xl uppercase tracking-tighter">
-              No products found matching your search
-            </p>
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300"><Search size={32} /></div>
+            <p className="text-gray-400 font-black text-xl uppercase tracking-tighter">No products found matching your search</p>
           </div>
         )}
 
-        {/* --- PAGINATION CONTROLS --- */}
+        {/* --- PAGINATION --- */}
         {totalPages > 1 && (
           <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest italic">
-              Showing {""}
-              <span className="text-blue-500">
-                {indexOfFirstItem + 1} -{" "}
-                {Math.min(indexOfLastItem, filteredProducts.length)}
-              </span>{" "}
-              of <span className="text-blue-500">{products.length}</span>
-            </p>
-
+            <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest italic">Showing <span className="text-blue-500">{indexOfFirstItem + 1} - {Math.min(indexOfLastItem, filteredProducts.length)}</span> of <span className="text-blue-500">{products.length}</span></p>
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="w-10 h-10 p-2 rounded-lg bg-white border border-gray-200 disabled:opacity-30 hover:shadow-md transition-all"
-              >
-                <ChevronLeft size={18} />
-              </button>
-
+              <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className="w-10 h-10 p-2 rounded-lg bg-white border border-gray-200 disabled:opacity-30"><ChevronLeft size={18} /></button>
               <div className="flex gap-1">
                 {[...Array(totalPages)].map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => paginate(idx + 1)}
-                    className={`w-10 h-10 rounded-lg font-bold text-xs transition-all ${
-                      currentPage === idx + 1
-                        ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-                        : "bg-white border border-gray-200 text-gray-500 hover:border-blue-400"
-                    }`}
-                  >
-                    {idx + 1}
-                  </button>
+                  <button key={idx} onClick={() => paginate(idx + 1)} className={`w-10 h-10 rounded-lg font-bold text-xs transition-all ${currentPage === idx + 1 ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "bg-white border border-gray-200 text-gray-500"}`}>{idx + 1}</button>
                 ))}
               </div>
-
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="w-10 h-10 p-2 rounded-lg bg-white border border-gray-200 disabled:opacity-30 hover:shadow-md transition-all"
-              >
-                <ChevronRight size={18} />
-              </button>
+              <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages} className="w-10 h-10 p-2 rounded-lg bg-white border border-gray-200 disabled:opacity-30"><ChevronRight size={18} /></button>
             </div>
           </div>
         )}
@@ -628,4 +415,3 @@ export default function ProductList() {
     </div>
   );
 }
-
