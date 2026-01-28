@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, use } from "react";
@@ -20,11 +19,11 @@ export default function BlogFormPage({ params }) {
 
   useEffect(() => {
     const initEditor = async () => {
-      // અગત્યનું: અહીં આપણે 'ckeditor5-build-classic' ને બદલે 
+      // અગત્યનું: અહીં આપણે 'ckeditor5-build-classic' ને બદલે
       // ફૂલ ફીચર લોડ કરવા માટે dynamic import કરી રહ્યા છીએ
       const { CKEditor } = await import("@ckeditor/ckeditor5-react");
       const ClassicEditor = await import("@ckeditor/ckeditor5-build-classic");
-      
+
       setCKEditorComponent(() => CKEditor);
       setClassicEditor(() => ClassicEditor.default);
       setEditorLoaded(true);
@@ -49,17 +48,22 @@ export default function BlogFormPage({ params }) {
   // --- Image Upload Adapter ---
   function uploadAdapter(loader) {
     return {
-      upload: () => loader.file.then((file) => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve({ default: reader.result });
-        reader.onerror = (err) => reject(err);
-        reader.readAsDataURL(file);
-      })),
+      upload: () =>
+        loader.file.then(
+          (file) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve({ default: reader.result });
+              reader.onerror = (err) => reject(err);
+              reader.readAsDataURL(file);
+            }),
+        ),
     };
   }
 
   function customAdapterPlugin(editor) {
-    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => uploadAdapter(loader);
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) =>
+      uploadAdapter(loader);
   }
 
   const handleSubmit = async (e) => {
@@ -89,12 +93,17 @@ export default function BlogFormPage({ params }) {
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <Toaster position="top-center" />
-      
+
       <style>{`
         .ck-editor__editable_inline {
           min-height: 500px;
@@ -114,7 +123,9 @@ export default function BlogFormPage({ params }) {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label className="font-bold text-gray-700 block mb-2">Blog Title</label>
+            <label className="font-bold text-gray-700 block mb-2">
+              Blog Title
+            </label>
             <input
               type="text"
               value={blog.title}
@@ -126,7 +137,9 @@ export default function BlogFormPage({ params }) {
           </div>
 
           <div className="mb-6">
-            <label className="font-bold text-gray-700 block mb-2">Content</label>
+            <label className="font-bold text-gray-700 block mb-2">
+              Content
+            </label>
             <div className="rounded-lg overflow-hidden border border-gray-300">
               {editorLoaded && CKEditorComponent ? (
                 <CKEditorComponent
@@ -134,8 +147,6 @@ export default function BlogFormPage({ params }) {
                   data={blog.content}
                   config={{
                     extraPlugins: [customAdapterPlugin],
-                    // નોંધ: જો ClassicEditor માં કલર ન આવે, તો 'fontColor' દૂર કરી 
-                    // માત્ર 'bold', 'italic' જેવું રાખવું પડે અથવા custom build વાપરવું પડે.
                     toolbar: [
                      'heading', '|',
                       'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
@@ -153,6 +164,43 @@ export default function BlogFormPage({ params }) {
               ) : (
                 <div className="p-10 text-center text-gray-400">Loading Editor...</div>
               )}
+
+              {/* <CKEditorComponent
+                editor={ClassicEditor}
+                data={blog.content}
+                config={{
+                  extraPlugins: [customAdapterPlugin],
+                  // આ લાઇન ઉમેરો:
+                  list: {
+                    properties: {
+                      styles: true,
+                      startIndex: true,
+                      reversed: true,
+                    },
+                  },
+                  toolbar: [
+                    "heading",
+                    "|",
+                    "bold",
+                    "italic",
+                    "underline",
+                    "strikethrough",
+                    "|",
+                    "bulletedList",
+                    "numberedList",
+                    "|", // અહીં હવે ડ્રોપડાઉન દેખાશે
+                    "link",
+                    "uploadImage",
+                    "insertTable",
+                    "|",
+                    "undo",
+                    "redo",
+                  ],
+                }}
+                onChange={(event, editor) => {
+                  setBlog({ ...blog, content: editor.getData() });
+                }}
+              /> */}
             </div>
           </div>
 

@@ -1,4 +1,5 @@
 "use client";
+import "@/styles/editor-style.css";
 import React, { useEffect, useState, useCallback } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";
@@ -311,7 +312,7 @@ export default function ProductList() {
                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
                   Description
                 </label>
-                <div className="rounded-2xl overflow-hidden border-2 border-gray-50">
+                <div className="rounded-xl overflow-hidden border-2 border-gray-50">
                   {editorLoaded && (
                     <CKEditorComponent
                       editor={require("@ckeditor/ckeditor5-build-classic")}
@@ -639,7 +640,6 @@ export default function ProductList() {
                 <ChevronRight size={18} />
               </button>
             </div>
-
           </div>
         )}
       </div>

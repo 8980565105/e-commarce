@@ -1,4 +1,5 @@
 import { connectMongoDB } from "@/lib/db";
+import '@/styles/editor-style.css';
 import Blog from "@/models/blog";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -49,7 +50,7 @@ export default async function BlogDetailPage({ params }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 py-16">
         <Link
           href="/blog"
           className="inline-flex items-center text-purple-600 font-semibold mb-8 hover:text-purple-800 transition-colors"

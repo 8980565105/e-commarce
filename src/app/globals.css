@@ -3,6 +3,7 @@
 /* formatting styles */
 .product-html-content {
   white-space: pre-wrap; /* Spaces aur line breaks dikhane ke liye */
+  padding: 20px;
 }
 
 .product-html-content b, .product-html-content strong {
@@ -16,4 +17,9 @@
 .product-html-content ul {
   list-style-type: disc;
   margin-left: 1.5rem;
+}
+
+.product-html-content ol {
+  margin-left: 1.5rem;
+  list-style-type: decimal !important;
 }
