@@ -8,14 +8,38 @@ function Page() {
   const [blogs, setBlogs] = useState([]);
 
   const partnerLogos = [
-    { name: "Dior", src: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg" },
-    { name: "H&M", src: "https://upload.wikimedia.org/wikipedia/commons/5/53/H%26M-Logo.svg" },
-    { name: "Gucci", src: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Gucci_logo.png" },
-    { name: "Zara", src: "https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg" },
-    { name: "Versace", src: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Versace_old_logo.svg" },
-    { name: "Estee Lauder", src: "https://upload.wikimedia.org/wikipedia/commons/7/79/Est%C3%A9e_Lauder_Companies_Logo.svg" },
-    { name: "Cartier", src: "https://upload.wikimedia.org/wikipedia/commons/8/86/Cartier_logo.svg" },
-    { name: "Chanel", src: "https://upload.wikimedia.org/wikipedia/commons/3/35/Chanel_logo.svg" },
+    {
+      name: "Dior",
+      src: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg",
+    },
+    {
+      name: "H&M",
+      src: "https://upload.wikimedia.org/wikipedia/commons/5/53/H%26M-Logo.svg",
+    },
+    {
+      name: "Gucci",
+      src: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Gucci_logo.png",
+    },
+    {
+      name: "Zara",
+      src: "https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg",
+    },
+    {
+      name: "Versace",
+      src: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Versace_old_logo.svg",
+    },
+    {
+      name: "Estee Lauder",
+      src: "https://upload.wikimedia.org/wikipedia/commons/7/79/Est%C3%A9e_Lauder_Companies_Logo.svg",
+    },
+    {
+      name: "Cartier",
+      src: "https://upload.wikimedia.org/wikipedia/commons/8/86/Cartier_logo.svg",
+    },
+    {
+      name: "Chanel",
+      src: "https://upload.wikimedia.org/wikipedia/commons/3/35/Chanel_logo.svg",
+    },
   ];
 
   useEffect(() => {
@@ -24,9 +48,9 @@ function Page() {
         const res = await fetch("/api/admin/collection");
         const result = await res.json();
         if (result.success && Array.isArray(result.data)) {
-          // --- LOGIC: Khali Active (status !== false) hoy ej filter karo ---
-          const activeCollections = result.data.filter(item => item.status !== false);
-          // Latest 4 collections reverse order ma set karo
+          const activeCollections = result.data.filter(
+            (item) => item.status !== false,
+          );
           setCollections(activeCollections.reverse().slice(0, 4));
         }
       } catch (err) {
@@ -60,7 +84,6 @@ function Page() {
 
   return (
     <div className="w-full bg-white overflow-x-hidden">
-      {/* --- HERO SECTION --- */}
       <section className="relative min-h-[90vh] flex items-center">
         <div className=" px-6 md:px-12 lg:px-24 w-full flex flex-col lg:flex-row items-center justify-between py-12">
           <div className="z-10 w-full lg:w-1/2 space-y-6 text-center lg:text-left">
@@ -91,10 +114,18 @@ function Page() {
             </div>
             <div className="hidden md:flex justify-center lg:justify-start gap-4 mt-12">
               <div className="w-24 h-32 rounded-t-full overflow-hidden bg-pink-100 border-4 border-white shadow-md">
-                <img src="/img/small1.png" alt="Model" className="w-full h-full object-cover" />
+                <img
+                  src="/img/small1.png"
+                  alt="Model"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="w-24 h-32 rounded-t-full overflow-hidden bg-blue-100 border-4 border-white shadow-md">
-                <img src="/img/small2.png" alt="Model" className="w-full h-full object-cover" />
+                <img
+                  src="/img/small2.png"
+                  alt="Model"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
@@ -110,7 +141,6 @@ function Page() {
         </div>
       </section>
 
-      {/* --- PARTNERS MARQUEE --- */}
       <section className="py-10 bg-gray-50 border-y border-gray-100 overflow-hidden">
         <style
           dangerouslySetInnerHTML={{
@@ -123,13 +153,22 @@ function Page() {
         />
         <div
           className="relative flex overflow-hidden items-center"
-          style={{ maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)" }}
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+          }}
         >
           <div className="marquee-inner py-4">
             <div className="flex shrink-0 items-center">
               {partnerLogos.concat(partnerLogos).map((logo, index) => (
                 <div key={index} className="mx-8 md:mx-12 shrink-0">
-                  <img src={logo.src} alt={logo.name} className="h-8 md:h-10 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500" />
+                  <img
+                    src={logo.src}
+                    alt={logo.name}
+                    className="h-8 md:h-10 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                  />
                 </div>
               ))}
             </div>
@@ -137,7 +176,6 @@ function Page() {
         </div>
       </section>
 
-      {/* --- POPULAR COLLECTIONS SECTION --- */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4 text-center md:text-left">
@@ -179,7 +217,7 @@ function Page() {
               </div>
             ))}
           </div>
-          
+
           {collections.length === 0 && (
             <div className="text-center py-10 text-gray-400 font-bold uppercase tracking-widest">
               No active collections found.
@@ -188,7 +226,6 @@ function Page() {
         </div>
       </section>
 
-      {/* --- BLOG SECTION --- */}
       <section className="py-20 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -202,7 +239,10 @@ function Page() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {blogs.map((blog) => (
-              <div key={blog._id} className="overflow-hidden shadow-sm transition-shadow group bg-white rounded-2xl">
+              <div
+                key={blog._id}
+                className="overflow-hidden shadow-sm transition-shadow group bg-white rounded-2xl"
+              >
                 <div className="overflow-hidden h-64">
                   <img
                     src={getFirstImage(blog.content)}

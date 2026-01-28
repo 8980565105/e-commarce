@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { headers } from "next/headers";
-import {connectMongoDB} from "@/lib/db";
+import { connectMongoDB } from "@/lib/db";
 import Order from "@/models/order";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -15,10 +15,9 @@ export async function POST(req) {
     event = stripe.webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET,
     );
   } catch (err) {
-    console.log("❌ Webhook signature error:", err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
@@ -35,7 +34,6 @@ export async function POST(req) {
         stripePaymentId: paymentIntent.id,
       });
 
-      console.log("✅ Order marked as PAID:", orderId);
     }
   }
 

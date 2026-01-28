@@ -12,24 +12,23 @@ export async function GET(req) {
     const sort = searchParams.get("sort");
     const search = searchParams.get("search");
 
-
     if (id) {
       const product = await Product.findOne({
         _id: id,
-        status: true, 
+        status: true,
       }).populate("category");
 
       if (!product) {
         return NextResponse.json(
           { success: false, error: "Product not found or inactive" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
       return NextResponse.json({ success: true, data: product });
     }
 
-    let query = { status: true }; 
+    let query = { status: true };
 
     if (category) {
       query.category = category;
@@ -59,8 +58,7 @@ export async function GET(req) {
     console.error("User Product Fetch Error:", error);
     return NextResponse.json(
       { success: false, error: "Server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

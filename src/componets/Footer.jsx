@@ -42,7 +42,6 @@ export default function Footer() {
 
   return (
     <footer className="w-full font-sans">
-      {/* Service Section */}
       <div className="bg-white py-12 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <ServiceItem
@@ -68,12 +67,9 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Main Footer */}
       <div className="bg-[#0F172A] text-white pt-16 pb-8 px-6 md:px-12 lg:px-24">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* 1. Logo & Contact */}
           <div className="space-y-6">
-            {/* <h2 className="text-2xl font-bold">Fesona</h2> */}
             <div className="w-152px h-32px">
               <Link href="/">
                 <img src="/img/Logo white.png" alt="logo" className="" />
@@ -89,14 +85,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 2. SHOP SECTION (Only Top 5 Collections) */}
           <div>
             <h3 className="text-lg font-bold mb-6 uppercase tracking-wider">
               Shop
             </h3>
             <ul className="space-y-4 text-gray-400 text-sm">
               {loading ? (
-                // સ્કેલેટન લોડિંગ ઇફેક્ટ
                 [...Array(5)].map((_, i) => (
                   <li
                     key={i}
@@ -110,7 +104,6 @@ export default function Footer() {
                       href={`/collection/${item._id}`}
                       className="hover:text-[#FF4D59] transition-colors capitalize block"
                     >
-                      {/* જો ડેટામાં title હોય તો item.title લખવું, નહીતર item.name */}
                       {item.name || item.title}
                     </Link>
                   </li>
@@ -121,7 +114,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 3. Information */}
           <div>
             <h3 className="text-lg font-bold mb-6 uppercase tracking-wider">
               Information
@@ -135,7 +127,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 4. Newsletter */}
           <div className="space-y-6">
             <h3 className="text-lg font-bold uppercase tracking-wider">
               Newsletter
@@ -153,7 +144,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Copyright */}
         <div className="mt-16 pt-8 border-t border-slate-800 text-center text-gray-500 text-xs">
           <p>© {new Date().getFullYear()} Fesona. All rights reserved.</p>
         </div>
@@ -162,7 +152,6 @@ export default function Footer() {
   );
 }
 
-// --- Helper Components ---
 
 const ServiceItem = ({ icon, title, desc }) => (
   <div className="flex flex-col items-center text-center space-y-2 group">

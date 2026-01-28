@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
 import { useCart } from "../../../../context/cartcontext";
-import { ChevronLeft, ChevronRight } from "lucide-react"; // Install lucide-react if you haven't
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function CollectionDetailPage() {
   const { id } = useParams();
@@ -15,9 +15,8 @@ function CollectionDetailPage() {
   const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState("");
 
-  // --- Pagination States ---
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 9; // Adjust number of products per page here
+  const productsPerPage = 9; 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -42,7 +41,6 @@ function CollectionDetailPage() {
     if (id) fetchProducts();
   }, [id]);
 
-  // --- Pagination Logic ---
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(
@@ -85,7 +83,6 @@ function CollectionDetailPage() {
     <div className="bg-white min-h-screen text-black">
       <Toaster position="top-center" />
 
-      {/* --- BANNER SECTION --- */}
       <section className="bg-gray-50 py-16 px-6 md:px-24 border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
           <span className="text-red-500 font-black text-xs uppercase tracking-[0.3em]">

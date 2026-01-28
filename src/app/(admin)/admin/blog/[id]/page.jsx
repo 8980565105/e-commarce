@@ -19,8 +19,6 @@ export default function BlogFormPage({ params }) {
 
   useEffect(() => {
     const initEditor = async () => {
-      // અગત્યનું: અહીં આપણે 'ckeditor5-build-classic' ને બદલે
-      // ફૂલ ફીચર લોડ કરવા માટે dynamic import કરી રહ્યા છીએ
       const { CKEditor } = await import("@ckeditor/ckeditor5-react");
       const ClassicEditor = await import("@ckeditor/ckeditor5-build-classic");
 
@@ -148,59 +146,44 @@ export default function BlogFormPage({ params }) {
                   config={{
                     extraPlugins: [customAdapterPlugin],
                     toolbar: [
-                     'heading', '|',
-                      'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
-                      'fontColor', 'fontBackgroundColor', 'fontSize', 'fontFamily', '|',
-                      'alignment', '|',
-                      'bulletedList', 'numberedList', '|',
-                      'link', 'uploadImage', 'insertTable', 'blockQuote', 'mediaEmbed', '|',
-                      'undo', 'redo'
-                    ]
+                      "heading",
+                      "|",
+                      "bold",
+                      "italic",
+                      "underline",
+                      "strikethrough",
+                      "subscript",
+                      "superscript",
+                      "|",
+                      "fontColor",
+                      "fontBackgroundColor",
+                      "fontSize",
+                      "fontFamily",
+                      "|",
+                      "alignment",
+                      "|",
+                      "bulletedList",
+                      "numberedList",
+                      "|",
+                      "link",
+                      "uploadImage",
+                      "insertTable",
+                      "blockQuote",
+                      "mediaEmbed",
+                      "|",
+                      "undo",
+                      "redo",
+                    ],
                   }}
                   onChange={(event, editor) => {
                     setBlog({ ...blog, content: editor.getData() });
                   }}
                 />
               ) : (
-                <div className="p-10 text-center text-gray-400">Loading Editor...</div>
+                <div className="p-10 text-center text-gray-400">
+                  Loading Editor...
+                </div>
               )}
-
-              {/* <CKEditorComponent
-                editor={ClassicEditor}
-                data={blog.content}
-                config={{
-                  extraPlugins: [customAdapterPlugin],
-                  // આ લાઇન ઉમેરો:
-                  list: {
-                    properties: {
-                      styles: true,
-                      startIndex: true,
-                      reversed: true,
-                    },
-                  },
-                  toolbar: [
-                    "heading",
-                    "|",
-                    "bold",
-                    "italic",
-                    "underline",
-                    "strikethrough",
-                    "|",
-                    "bulletedList",
-                    "numberedList",
-                    "|", // અહીં હવે ડ્રોપડાઉન દેખાશે
-                    "link",
-                    "uploadImage",
-                    "insertTable",
-                    "|",
-                    "undo",
-                    "redo",
-                  ],
-                }}
-                onChange={(event, editor) => {
-                  setBlog({ ...blog, content: editor.getData() });
-                }}
-              /> */}
             </div>
           </div>
 

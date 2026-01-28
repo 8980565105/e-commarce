@@ -241,7 +241,6 @@ export default function AdminHeader() {
         </div>
       )}
 
-      {/* --- Auth Modal --- */}
       {showModal && (
         <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md text-[#1A2B49]">
           <div className="bg-white w-full max-w-md rounded-4xl p-8 relative shadow-2xl animate-in fade-in zoom-in duration-300">
@@ -288,7 +287,6 @@ export default function AdminHeader() {
   );
 }
 
-// --- Helper Components ---
 function AdminNavLink({ href, icon, label }) {
   return (
     <Link

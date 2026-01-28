@@ -15,7 +15,6 @@ export default function UserHeader() {
   const pathname = usePathname();
   const { cartItems } = useCart();
 
-  // --- Cookie Helper ---
   const getCookie = (name) => {
     if (typeof document === "undefined") return null;
     const value = `; ${document.cookie}`;
@@ -24,7 +23,6 @@ export default function UserHeader() {
     return null;
   };
 
-  // Auth ચેક કરવાનું ફંક્શન
   const checkAuth = () => {
     const isLoggedIn = getCookie("isLoggedIn") === "true";
     const name = getCookie("userName");
@@ -43,7 +41,6 @@ export default function UserHeader() {
   }, [pathname]);
 
   const handleLogout = () => {
-    // બધી કુકીઝ અને લોકલ સ્ટોરેજ ક્લીન કરો
     document.cookie =
       "isLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     document.cookie =

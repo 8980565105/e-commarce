@@ -26,7 +26,6 @@ export default function ProductForm({ editData = null, onComplete }) {
   const [editorLoaded, setEditorLoaded] = useState(false);
   const router = useRouter();
 
-  // ૧. Initial state ને અલગ રાખવી જેથી રિસેટ કરવામાં સરળતા રહે
   const initialState = {
     title: "",
     description: "",

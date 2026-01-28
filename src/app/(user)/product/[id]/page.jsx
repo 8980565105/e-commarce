@@ -99,7 +99,6 @@ export default function ProductDetailPage() {
       <Toaster position="top-center" reverseOrder={false} />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-        {/* IMAGE GALLERY */}
         <div className="sticky top-24 space-y-6">
           <div className="relative group overflow-hidden bg-gray-50 aspect-4/5 rounded-xl">
             <img
@@ -144,7 +143,6 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* PRODUCT INFO */}
         <div className="flex flex-col space-y-8">
           <div>
             <span className="text-red-500 font-black tracking-widest uppercase text-xs">
@@ -158,7 +156,6 @@ export default function ProductDetailPage() {
             </p>
           </div>
 
-          {/* SIZE SELECTION */}
           {product.variants?.length > 0 && (
             <div className="pt-4">
               <p className="font-black uppercase text-xs tracking-[0.2em] mb-4 text-gray-400">

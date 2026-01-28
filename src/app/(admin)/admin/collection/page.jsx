@@ -15,7 +15,6 @@ export default function CollectionPage() {
   const onDrop = useCallback((acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
     setFile(selectedFile);
-    // ઈમેજ પ્રિવ્યૂ સેટ કરવા માટે
     setPreview(URL.createObjectURL(selectedFile));
   }, []);
 

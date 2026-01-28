@@ -3,16 +3,15 @@ import { connectMongoDB } from "@/lib/db";
 import Product from "@/models/product";
 
 export async function GET() {
-  try{
-  await connectMongoDB();
-  const products = await Product.find({})
-    .populate("category")
-    .sort({ createdAt: -1 });
+  try {
+    await connectMongoDB();
+    const products = await Product.find({})
+      .populate("category")
+      .sort({ createdAt: -1 });
 
-  return NextResponse.json({ success: true, data: products });
-  }catch (error){
+    return NextResponse.json({ success: true, data: products });
+  } catch (error) {
     return NextResponse.json({ success: false, error: error.message });
-
   }
 }
 
@@ -35,7 +34,7 @@ export async function PUT(req) {
   const updated = await Product.findByIdAndUpdate(
     id,
     { $set: updateData },
-    { new: true }
+    { new: true },
   );
 
   return NextResponse.json({ success: true, data: updated });
@@ -50,8 +49,8 @@ export async function DELETE(req) {
 
     if (!id) {
       return NextResponse.json(
-        { success: false, error: "Product ID is required" }, 
-        { status: 400 }
+        { success: false, error: "Product ID is required" },
+        { status: 400 },
       );
     }
 
@@ -59,21 +58,20 @@ export async function DELETE(req) {
 
     if (!deletedProduct) {
       return NextResponse.json(
-        { success: false, error: "Product not found or already deleted" }, 
-        { status: 404 }
+        { success: false, error: "Product not found or already deleted" },
+        { status: 404 },
       );
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: "Product deleted successfully" 
+    return NextResponse.json({
+      success: true,
+      message: "Product deleted successfully",
     });
-
   } catch (error) {
     console.error("Delete API Error:", error);
     return NextResponse.json(
-      { success: false, error: error.message }, 
-      { status: 500 }
+      { success: false, error: error.message },
+      { status: 500 },
     );
   }
 }

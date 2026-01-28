@@ -13,8 +13,6 @@ function AllCollectionPage() {
         const result = await res.json();
         
         if (result.success) {
-          // --- LOGIC: Khali Active collections j filter karo ---
-          // item.status !== false etle ke: undefined (juno data) athva true (navo data) 
           const activeOnly = result.data.filter((item) => item.status !== false);
           setCollections(activeOnly);
         }
@@ -41,7 +39,6 @@ function AllCollectionPage() {
   return (
     <div className="bg-white min-h-screen text-black">
       
-      {/* --- 1. PREMIUM BANNER SECTION --- */}
       <section className="relative h-[40vh] md:h-[50vh] bg-[#1A2B49] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-[-10%] left-[-5%] w-64 h-64 rounded-full bg-white blur-3xl"></div>
@@ -63,7 +60,6 @@ function AllCollectionPage() {
         </div>
       </section>
 
-      {/* --- 2. COLLECTION GRID SECTION --- */}
       <section className="py-20 px-6 md:px-12 lg:px-6 max-w-7xl mx-auto">
         
         <div className="mb-16">

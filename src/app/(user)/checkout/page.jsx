@@ -123,7 +123,7 @@ export default function CheckoutPage() {
 
       if (result.success) {
         if (paymentMethod === "Cash") {
-          clearCart(); 
+          clearCart();
           toast.success("Order success! 🎉");
           router.push("/success");
         }
@@ -236,7 +236,6 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {/* PAYMENT METHOD */}
           <div className="bg-white p-8 rounded-4xl shadow-sm border border-gray-100">
             <h2 className="text-2xl font-black italic uppercase tracking-tighter mb-8 flex items-center gap-2">
               <span className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-xs not-italic">

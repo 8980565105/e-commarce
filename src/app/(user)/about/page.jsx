@@ -35,9 +35,7 @@ const FashionLandingPage = () => {
 
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900">
-      {/* --- HERO SECTION --- */}
       <section className="relative h-[80vh] flex items-center justify-center text-center px-6">
-        {/* Background Image with Overlay */}
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{

@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
-/* formatting styles */
 .product-html-content {
-  white-space: pre-wrap; /* Spaces aur line breaks dikhane ke liye */
+  white-space: pre-wrap; 
   padding: 20px;
 }
 

@@ -8,7 +8,6 @@ export default function UserList() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // --- Pagination States ---
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 7;
 
@@ -33,7 +32,6 @@ export default function UserList() {
     fetchUsers();
   }, []);
 
-  // Filter Logic
   const filteredUsers = users.filter(
     (u) =>
       u.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,16 +40,13 @@ export default function UserList() {
       u.role?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // --- Pagination Calculation ---
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-  // પેજ બદલવાનું ફંક્શન
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // જ્યારે સર્ચ કરો ત્યારે પાછા પેલા પેજ પર આવી જવું
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);

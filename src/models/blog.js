@@ -1,4 +1,3 @@
-
 import mongoose, { Schema, models, model } from "mongoose";
 
 const blogSchema = new Schema(
@@ -6,9 +5,9 @@ const blogSchema = new Schema(
     title: { type: String, required: true },
     content: { type: String, required: true },
     author: { type: String, default: "Admin" },
-    status: { type: Boolean, default: true }, 
+    status: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Blog = models.Blog || model("Blog", blogSchema);

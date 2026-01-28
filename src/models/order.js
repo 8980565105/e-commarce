@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema({
@@ -25,7 +24,7 @@ const OrderSchema = new mongoose.Schema({
       size: String,
       color: String,
       image: String,
-    }
+    },
   ],
   subtotal: Number,
   shippingFee: Number,
@@ -36,5 +35,3 @@ const OrderSchema = new mongoose.Schema({
 });
 
 export default mongoose.models.Order || mongoose.model("Order", OrderSchema);
-
-

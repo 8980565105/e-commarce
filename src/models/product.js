@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const VariantSchema = new mongoose.Schema({
@@ -20,10 +19,9 @@ const ProductSchema = new mongoose.Schema(
     images: [String],
     variants: [VariantSchema],
 
-  
     status: {
       type: Boolean,
-      default: true, 
+      default: true,
     },
   },
   { timestamps: true },

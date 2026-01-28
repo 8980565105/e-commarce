@@ -1,5 +1,3 @@
-
-
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -20,14 +18,15 @@ export const CartProvider = ({ children }) => {
   const addToCart = (product, selectedSize, price) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
-        (item) => item._id === product._id && item.selectedSize === selectedSize
+        (item) =>
+          item._id === product._id && item.selectedSize === selectedSize,
       );
 
       if (existingItem) {
         return prevItems.map((item) =>
           item._id === product._id && item.selectedSize === selectedSize
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
       return [...prevItems, { ...product, selectedSize, price, quantity: 1 }];
@@ -42,29 +41,31 @@ export const CartProvider = ({ children }) => {
           return { ...item, quantity: newQty < 1 ? 1 : newQty };
         }
         return item;
-      })
+      }),
     );
   };
 
   const removeFromCart = (id, size) => {
     setCartItems((prevItems) =>
-      prevItems.filter((item) => !(item._id === id && item.selectedSize === size))
+      prevItems.filter(
+        (item) => !(item._id === id && item.selectedSize === size),
+      ),
     );
   };
 
   const clearCart = () => {
-    setCartItems([]); 
-    localStorage.removeItem("cart"); 
+    setCartItems([]);
+    localStorage.removeItem("cart");
   };
 
   return (
-    <CartContext.Provider 
-      value={{ 
-        cartItems, 
-        addToCart, 
-        updateQuantity, 
-        removeFromCart, 
-        clearCart
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+        clearCart,
       }}
     >
       {children}
