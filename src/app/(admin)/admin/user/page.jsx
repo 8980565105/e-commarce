@@ -182,7 +182,7 @@ export default function UserList() {
                 {indexOfFirstUser + 1}-{" "}
                 {Math.min(indexOfLastUser, filteredUsers.length)}
               </span>{" "}
-              of <span class="text-blue-600">{filteredUsers.length}</span> Users
+              of <span className="text-blue-600">{filteredUsers.length}</span> Users
             </p>
 
             <div className="flex items-center gap-2">
