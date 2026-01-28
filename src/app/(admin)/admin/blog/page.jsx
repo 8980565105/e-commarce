@@ -20,13 +20,13 @@ export default function BlogListPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 10;
+  const blogsPerPage = 5;
 
   // Modals State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  
+
   const [currentBlog, setCurrentBlog] = useState({
     title: "",
     content: "",
@@ -62,7 +62,7 @@ export default function BlogListPage() {
 
   // --- Search & Pagination ---
   const filteredBlogs = blogs.filter((blog) =>
-    blog.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    blog.title?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const indexOfLastBlog = currentPage * blogsPerPage;
@@ -138,20 +138,21 @@ export default function BlogListPage() {
                 const reader = new FileReader();
                 reader.onload = () => resolve({ default: reader.result });
                 reader.readAsDataURL(file);
-              })
+              }),
           ),
       };
     };
   }
 
-  if (loading) return (
-    <div className="h-screen flex items-center justify-center">
+  if (loading)
+    return (
+      <div className="h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  );
+      </div>
+    );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-10 text-black">
+    <div className="min-h-screen bg-[#F8FAFC] text-black">
       <Toaster position="top-center" />
 
       {/* --- DELETE CONFIRMATION MODAL (Center) --- */}
@@ -165,7 +166,8 @@ export default function BlogListPage() {
               Delete Article?
             </h3>
             <p className="text-gray-500 text-center mt-2 text-sm font-medium">
-              This action cannot be undone. The blog will be permanently removed.
+              This action cannot be undone. The blog will be permanently
+              removed.
             </p>
             <div className="flex gap-3 mt-8">
               <button
@@ -205,7 +207,7 @@ export default function BlogListPage() {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full pl-12 pr-6 py-4 bg-white border border-transparent rounded-2xl focus:ring-4 focus:ring-blue-500/5 font-bold transition-all outline-none text-sm shadow-sm"
+            className="w-full h-14 pl-14 pr-6 bg-gray-200 border-none rounded-2xl focus:ring-4 ring-blue-500/5 font-bold transition-all"
           />
           <SearchIcon className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" />
         </div>
@@ -219,7 +221,7 @@ export default function BlogListPage() {
       </div>
 
       {/* --- TABLE AREA --- */}
-      <div className="bg-white rounded-4xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-[2px] border-b border-gray-100">
@@ -232,11 +234,14 @@ export default function BlogListPage() {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {currentBlogs.map((blog) => (
-                <tr key={blog._id} className="hover:bg-blue-50/10 transition-all group">
+                <tr
+                  key={blog._id}
+                  className="hover:bg-blue-50/10 transition-all group"
+                >
                   <td className="px-8 py-5">
                     <img
                       src={getFirstImage(blog.content)}
-                      className="h-14 w-14 object-cover rounded-2xl ring-4 ring-gray-50 shadow-sm"
+                      className="h-16 w-16 object-cover rounded-2xl ring-4 ring-gray-50"
                       alt=""
                     />
                   </td>
@@ -251,19 +256,29 @@ export default function BlogListPage() {
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-2 text-gray-400 font-bold text-xs uppercase italic">
                       <Calendar size={14} className="text-gray-300" />
-                      {new Date(blog.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      {new Date(blog.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
                     </div>
                   </td>
                   <td className="px-8 py-5 text-right">
                     <div className="flex justify-end gap-3">
                       <button
-                        onClick={() => { setCurrentBlog(blog); setIsModalOpen(true); }}
+                        onClick={() => {
+                          setCurrentBlog(blog);
+                          setIsModalOpen(true);
+                        }}
                         className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"
                       >
                         <Edit2 size={16} />
                       </button>
                       <button
-                        onClick={() => { setDeleteId(blog._id); setIsDeleting(true); }}
+                        onClick={() => {
+                          setDeleteId(blog._id);
+                          setIsDeleting(true);
+                        }}
                         className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition-all"
                       >
                         <Trash2 size={16} />
@@ -279,41 +294,48 @@ export default function BlogListPage() {
         {filteredBlogs.length === 0 && (
           <div className="py-24 text-center">
             <BookOpen className="w-14 h-14 text-gray-100 mx-auto mb-4" />
-            <p className="text-gray-400 font-black uppercase text-[10px] tracking-widest">No Articles Found</p>
+            <p className="text-gray-400 font-black uppercase text-[10px] tracking-widest">
+              No Articles Found
+            </p>
           </div>
         )}
 
         {/* --- PAGINATION --- */}
         {totalPages > 1 && (
           <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
-             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                Showing <span className="text-black">{indexOfFirstBlog + 1} - {Math.min(indexOfLastBlog, filteredBlogs.length)}</span> of {filteredBlogs.length}
-             </p>
-             <div className="flex gap-2">
-                <button 
-                    disabled={currentPage === 1} 
-                    onClick={() => paginate(currentPage - 1)}
-                    className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl disabled:opacity-30"
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              Showing{" "}
+              <span className="text-black">
+                {indexOfFirstBlog + 1} -{" "}
+                {Math.min(indexOfLastBlog, filteredBlogs.length)}
+              </span>{" "}
+              of {filteredBlogs.length}
+            </p>
+            <div className="flex gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => paginate(currentPage - 1)}
+                className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl disabled:opacity-30"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => paginate(i + 1)}
+                  className={`w-10 h-10 rounded-xl font-black text-xs transition-all ${currentPage === i + 1 ? "bg-black text-white shadow-lg" : "bg-white border border-gray-200 text-gray-400"}`}
                 >
-                    <ChevronLeft size={18} />
+                  {i + 1}
                 </button>
-                {[...Array(totalPages)].map((_, i) => (
-                    <button
-                        key={i}
-                        onClick={() => paginate(i + 1)}
-                        className={`w-10 h-10 rounded-xl font-black text-xs transition-all ${currentPage === i + 1 ? "bg-black text-white shadow-lg" : "bg-white border border-gray-200 text-gray-400"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-                <button 
-                    disabled={currentPage === totalPages} 
-                    onClick={() => paginate(currentPage + 1)}
-                    className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl disabled:opacity-30"
-                >
-                    <ChevronRight size={18} />
-                </button>
-             </div>
+              ))}
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => paginate(currentPage + 1)}
+                className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl disabled:opacity-30"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -321,30 +343,46 @@ export default function BlogListPage() {
       {/* --- EDIT MODAL (Full Screen Overlay) --- */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-100 p-4">
-          <div className="bg-white rounded-4xl w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-xl w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-200">
             <div className="p-8 border-b flex justify-between items-center bg-gray-50/50">
               <div>
-                <h2 className="text-2xl font-black text-gray-900 uppercase italic tracking-tighter">Update Content</h2>
-                <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Editing: {currentBlog.title}</p>
+                <h2 className="text-2xl font-black text-gray-900 uppercase italic tracking-tighter">
+                  Update Content
+                </h2>
+                <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+                  Editing: {currentBlog.title}
+                </p>
               </div>
-              <button onClick={() => setIsModalOpen(false)} className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-400 hover:text-red-500 shadow-sm transition-all">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-400 hover:text-red-500 shadow-sm transition-all"
+              >
                 <X size={20} />
               </button>
             </div>
-            
-            <form onSubmit={handleUpdate} className="p-8 overflow-y-auto flex-1">
+
+            <form
+              onSubmit={handleUpdate}
+              className="p-8 overflow-y-auto flex-1"
+            >
               <div className="mb-8">
-                <label className="block text-[10px] font-black uppercase text-gray-400 mb-3 tracking-widest">Headline</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 mb-3 tracking-widest">
+                  Headline
+                </label>
                 <input
                   type="text"
                   value={currentBlog.title}
-                  onChange={(e) => setCurrentBlog({ ...currentBlog, title: e.target.value })}
+                  onChange={(e) =>
+                    setCurrentBlog({ ...currentBlog, title: e.target.value })
+                  }
                   className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/5 focus:bg-white outline-none font-bold text-lg transition-all"
                   required
                 />
               </div>
               <div className="mb-10">
-                <label className="block text-[10px] font-black uppercase text-gray-400 mb-3 tracking-widest">Article Body</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 mb-3 tracking-widest">
+                  Article Body
+                </label>
                 <div className="rounded-2xl overflow-hidden border border-gray-100 min-h-100">
                   {editorLoaded && CKEditor && (
                     <CKEditor
@@ -352,7 +390,10 @@ export default function BlogListPage() {
                       data={currentBlog.content}
                       config={{ extraPlugins: [customAdapterPlugin] }}
                       onChange={(event, editor) =>
-                        setCurrentBlog({ ...currentBlog, content: editor.getData() })
+                        setCurrentBlog({
+                          ...currentBlog,
+                          content: editor.getData(),
+                        })
                       }
                     />
                   )}

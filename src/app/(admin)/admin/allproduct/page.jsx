@@ -196,7 +196,7 @@ export default function ProductList() {
     );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-black p-4 md:p-6">
+    <div className="min-h-screen bg-[#F8FAFC] text-black">
       <Toaster position="top-center" />
 
       {/* --- DELETE CONFIRMATION MODAL (Center) --- */}

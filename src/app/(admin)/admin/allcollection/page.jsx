@@ -167,7 +167,7 @@ export default function CollectionList() {
     );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-10 text-black">
+    <div className="min-h-screen bg-[#F8FAFC] text-black">
       <Toaster position="top-center" />
 
       {/* --- DELETE MODAL --- */}
@@ -302,7 +302,7 @@ export default function CollectionList() {
               placeholder="Search collections..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="w-full h-14 pl-14 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-4 ring-blue-500/5 font-bold transition-all placeholder:text-gray-300"
+              className="w-full h-14 pl-14 pr-6 bg-gray-200 border-none rounded-2xl focus:ring-4 ring-blue-500/5 font-bold transition-all"
             />
           </div>
           <Link

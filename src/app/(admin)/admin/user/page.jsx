@@ -88,7 +88,7 @@ export default function UserList() {
             placeholder="Search users..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-6 py-3.5 bg-white text-black border border-gray-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-blue-500 font-bold transition-all outline-none"
+            className="w-full h-14 pl-14 pr-6 bg-gray-200 border-none rounded-2xl focus:ring-4 ring-blue-500/5 font-bold transition-all"
           />
           <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
         </div>
