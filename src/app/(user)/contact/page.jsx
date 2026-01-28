@@ -70,7 +70,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
 
       {/* HERO SECTION */}
       <div className="flex flex-col gap-50">
