@@ -130,7 +130,7 @@ export default function BlogListingPage() {
                     href={`/blog/${blog._id}`}
                     className="inline-flex items-center text-xs font-black uppercase tracking-widest text-purple-600 group"
                   >
-                    Read Story{" "}
+                    Read more{" "}
                     <span className="ml-2 group-hover:translate-x-2 transition-transform">
                       →
                     </span>

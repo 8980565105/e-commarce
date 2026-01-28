@@ -309,7 +309,7 @@ export default function CollectionList() {
 
         <div className="flex justify-center items-center">
           <Link
-            href="/admin/admin/collection"
+            href="/admin/collection"
             className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-200 transition duration-200"
           >
            <CirclePlus size={20} /> ADD Collection

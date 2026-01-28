@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { connectMongoDB } from "@/lib/db";
 import Collection from "../../../../models/collection";
 
-// 1. GET: Badha collections melvva mate
 export async function GET() {
   try {
     await connectMongoDB();
@@ -13,7 +12,6 @@ export async function GET() {
   }
 }
 
-// 2. POST: Navu collection umerva mate
 export async function POST(request) {
   try {
     await connectMongoDB();
@@ -29,7 +27,6 @@ export async function POST(request) {
     const buffer = Buffer.from(bytes);
     const base64Image = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-    // Default status: true (Active)
     const newCollection = await Collection.create({ title, image: base64Image, status: true });
     return NextResponse.json({ success: true, message: "Created!", data: newCollection });
   } catch (error) {
@@ -37,7 +34,6 @@ export async function POST(request) {
   }
 }
 
-// 3. DELETE: Collection delete karva mate
 export async function DELETE(request) {
   try {
     await connectMongoDB();
@@ -55,7 +51,6 @@ export async function DELETE(request) {
   }
 }
 
-// 4. PUT: Edit Title/Image AND Toggle Status
 export async function PUT(request) {
   try {
     await connectMongoDB();
@@ -63,11 +58,9 @@ export async function PUT(request) {
     const contentType = request.headers.get("content-type");
     let id, updateData = {};
 
-    // Check if request is JSON (for Status Toggle) or FormData (for Edit)
     if (contentType && contentType.includes("application/json")) {
       const body = await request.json();
       id = body.id;
-      // Status update logic
       if (body.hasOwnProperty("status")) {
         updateData.status = body.status;
       }
@@ -79,7 +72,6 @@ export async function PUT(request) {
 
       if (title) updateData.title = title;
 
-      // Image processing
       if (file && typeof file !== "string") {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
