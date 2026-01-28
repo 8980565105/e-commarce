@@ -21,7 +21,7 @@ export default function CollectionList() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 5;
 
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -277,7 +277,9 @@ export default function CollectionList() {
 
       {/* --- HEADER --- */}
       <div className="mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="flex items-center gap-5">
+        {/* <div className="flex flex-1 max-w-2xl gap-4 w-full"> */}
+       
+        <div className="flex justify-between items-center gap-5">
           <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
             <LayoutGrid size={28} />
           </div>
@@ -291,31 +293,30 @@ export default function CollectionList() {
           </div>
         </div>
 
-        <div className="flex flex-1 max-w-2xl gap-4 w-full">
-          <div className="relative flex-1">
-            <Search
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300"
-              size={20}
-            />
-            <input
-              type="text"
-              placeholder="Search collections..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="w-full h-14 pl-14 pr-6 bg-gray-200 border-none rounded-2xl focus:ring-4 ring-blue-500/5 font-bold transition-all"
-            />
-          </div>
+        <div className="relative w-full md:w-96">
+          <Search
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300"
+            size={20}
+          />
+          <input
+            type="text"
+            placeholder="Search collections..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="w-full h-14 pl-14 pr-6 bg-gray-200 border-none rounded-2xl focus:ring-4 ring-blue-500/5 font-bold transition-all"
+          />
+        </div>
+
+        <div className="flex justify-center items-center">
           <Link
             href="/admin/admin/collection"
-            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-200 transition-all"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-200 transition duration-200"
           >
-            <CirclePlus size={20} />{" "}
-            <span className="hidden md:inline uppercase tracking-widest text-xs font-black">
-              Add New
-            </span>
+           <CirclePlus size={20} /> ADD Collection
           </Link>
         </div>
       </div>
+      {/* </div> */}
 
       {/* --- TABLE AREA --- */}
       <div className="bg-white rounded-4xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">

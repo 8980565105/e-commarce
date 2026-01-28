@@ -20,7 +20,7 @@ export default function AdminOrderPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 7;
+  const ordersPerPage = 6;
 
   const fetchOrders = async () => {
     try {
@@ -112,13 +112,13 @@ export default function AdminOrderPage() {
             <SearchIcon className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
 
-          <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100">
-            <p className="text-[9px] font-black text-gray-400 uppercase">
-              Total Found
-            </p>
-            <p className="text-xl font-black text-blue-600 tracking-tighter">
-              {totalOrders} Orders
-            </p>
+          <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100">
+            <span className="text-gray-500 font-bold uppercase text-xs tracking-widest">
+              Total 
+            </span>
+            <span className="bg-blue-600 text-white px-4 py-1 rounded-full font-black text-lg">
+              {totalOrders} 
+            </span>
           </div>
         </div>
 

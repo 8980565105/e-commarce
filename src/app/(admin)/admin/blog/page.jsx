@@ -10,6 +10,7 @@ import {
   Search as SearchIcon,
   Edit2,
   X,
+  CirclePlus,
   Trash2,
   Calendar,
   AlertCircle,
@@ -214,9 +215,9 @@ export default function BlogListPage() {
 
         <Link
           href="/admin/blog/new"
-          className="bg-black hover:bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest px-10 py-4 rounded-2xl shadow-xl transition-all active:scale-95"
+          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-200 transition duration-200"
         >
-          + Create New
+          <CirclePlus size={20} /> ADD Blog
         </Link>
       </div>
 
