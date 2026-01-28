@@ -15,7 +15,6 @@ export default function CheckoutPage() {
   const [clientSecret, setClientSecret] = useState("");
   const router = useRouter();
 
-  // Form State
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -27,7 +26,6 @@ export default function CheckoutPage() {
     zip: "",
   });
 
-  // Errors State
   const [errors, setErrors] = useState({});
 
   const calculatedSubtotal = useMemo(() => {
@@ -51,16 +49,14 @@ export default function CheckoutPage() {
       })
         .then((res) => res.json())
         .then((data) => setClientSecret(data.clientSecret))
-        .catch(() => toast.error("પેમેન્ટ ગેટવે લોડ કરવામાં ભૂલ આવી."));
+        .catch(() => toast.error("payment gaatway error"));
     }
   }, [grandTotal, paymentMethod]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = () => {
@@ -85,12 +81,12 @@ export default function CheckoutPage() {
 
   const handleOrderSubmit = async () => {
     if (cartItems.length === 0) {
-      toast.error("your cart is empt!");
+      toast.error("તમારું કાર્ટ ખાલી છે!");
       return false;
     }
 
     if (!validateForm()) {
-      toast.error("કૃપા કરીને બધી વિગતો સાચી રીતે ભરો.");
+      toast.error("all filde write are true");
       return false;
     }
 
@@ -127,36 +123,39 @@ export default function CheckoutPage() {
 
       if (result.success) {
         if (paymentMethod === "Cash") {
-          clearCart();
-          toast.success("order success! 🎉");
+          clearCart(); 
+          toast.success("Order success! 🎉");
           router.push("/success");
         }
         return true;
       } else {
-        toast.error(result.error || "order not saved ");
+        toast.error(result.error || "order not conform");
+        setLoading(false);
         return false;
       }
     } catch (error) {
-      toast.error("server not connetct");
+      toast.error("server connection error");
+      setLoading(false);
       return false;
-    } finally {
-      if (paymentMethod === "Cash") setLoading(false);
     }
   };
 
   const handleStripePayment = async (stripe, elements) => {
     const isSaved = await handleOrderSubmit();
+
     if (isSaved) {
+      clearCart();
+
       const { error } = await stripe.confirmPayment({
         elements,
-        confirmParams: { return_url: `${window.location.origin}/success` },
+        confirmParams: {
+          return_url: `${window.location.origin}/success`,
+        },
       });
 
       if (error) {
         toast.error(error.message);
         setLoading(false);
-      } else {
-        clearCart();
       }
     }
   };
@@ -237,6 +236,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
+          {/* PAYMENT METHOD */}
           <div className="bg-white p-8 rounded-4xl shadow-sm border border-gray-100">
             <h2 className="text-2xl font-black italic uppercase tracking-tighter mb-8 flex items-center gap-2">
               <span className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-xs not-italic">
@@ -279,7 +279,7 @@ export default function CheckoutPage() {
                   disabled={loading}
                   className="w-full mt-4 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest hover:bg-zinc-800 transition-all disabled:bg-gray-300 flex items-center justify-center gap-2"
                 >
-                  {loading ? "Processing Order..." : "Pay & Confirm Order"}
+                  {loading ? "Processing Order..." : "Confirm COD Order"}
                 </button>
               )}
             </div>
