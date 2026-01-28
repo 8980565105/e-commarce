@@ -6,7 +6,7 @@ const blogSchema = new Schema(
     title: { type: String, required: true },
     content: { type: String, required: true },
     author: { type: String, default: "Admin" },
-    status: { type: Boolean, default: true },
+    status: { type: Boolean, default: true }, 
   },
   { timestamps: true }
 );

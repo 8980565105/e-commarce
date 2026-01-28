@@ -26,11 +26,9 @@ export default function BlogListingPage() {
     fetchBlogs();
   }, []);
 
-  // --- Pagination Logic ---
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
 
-  // અત્યારે જે પેજ પર હોઈએ તેના 9 બ્લોગ્સ
   const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
   const totalPages = Math.ceil(blogs.length / blogsPerPage);
 
@@ -81,13 +79,11 @@ export default function BlogListingPage() {
         </div>
       </section>
 
-      {/* Blog Grid Section */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-800 uppercase italic">
-          Latest artical
+          Latest Articles
         </h2>
 
-        {/* 9 Blogs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {currentBlogs.map((blog) => (
             <div
@@ -141,7 +137,6 @@ export default function BlogListingPage() {
           ))}
         </div>
 
-        {/* --- PAGINATION CONTROLS --- */}
         {blogs.length > blogsPerPage && (
           <div className="mt-20 flex justify-center items-center gap-3">
             <button
@@ -189,4 +184,3 @@ export default function BlogListingPage() {
     </div>
   );
 }
-  
