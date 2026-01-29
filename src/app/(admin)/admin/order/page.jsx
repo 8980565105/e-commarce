@@ -114,10 +114,10 @@ export default function AdminOrderPage() {
 
           <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100">
             <span className="text-gray-500 font-bold uppercase text-xs tracking-widest">
-              Total 
+              Total
             </span>
             <span className="bg-blue-600 text-white px-4 py-1 rounded-full font-black text-lg">
-              {totalOrders} 
+              {totalOrders}
             </span>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function AdminOrderPage() {
                       <td className="p-6 text-right">
                         <button
                           onClick={() => setSelectedOrder(order)}
-                          className="text-[10px] font-black uppercase tracking-widest bg-black text-white px-5 py-2.5 rounded-xl hover:bg-blue-600 transition-all active:scale-95"
+                          className="text-[10px] font-black uppercase tracking-widest hover:bg-black text-white px-5 py-2.5 rounded-xl bg-blue-600 transition-all active:scale-95"
                         >
                           View Order
                         </button>
