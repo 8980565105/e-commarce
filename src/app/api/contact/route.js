@@ -58,3 +58,20 @@ export async function POST(req) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    await connectMongoDB();
+
+    // બધી ઇન્ક્વાયરીઝ લેટેસ્ટ પહેલા (createdAt: -1) મુજબ મેળવો
+    const inquiries = await Contact.find().sort({ createdAt: -1 });
+
+    return NextResponse.json({ success: true, data: inquiries }, { status: 200 });
+  } catch (error) {
+    console.error("❌ GET Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch inquiries" },
+      { status: 500 }
+    );
+  }
+}

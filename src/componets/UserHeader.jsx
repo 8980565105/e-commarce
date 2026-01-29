@@ -50,7 +50,7 @@ export default function UserHeader() {
   useEffect(() => {
     checkAuth();
     setShowDropdown(false);
-    setIsMobileMenuOpen(false); 
+    setIsMobileMenuOpen(false); // Link click thaya pachi mobile menu bandh thai jase
   }, [pathname]);
 
   const handleLogout = () => {
@@ -74,6 +74,7 @@ export default function UserHeader() {
       <Toaster position="top-center" />
 
       <div className="max-w-7xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+        {/* Left Side: Mobile Menu Button & Logo */}
         <div className="flex items-center gap-4">
           <button
             className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-md transition"
@@ -86,6 +87,7 @@ export default function UserHeader() {
           </Link>
         </div>
 
+        {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center gap-10 text-[#1A2B49] font-bold uppercase tracking-widest text-sm">
           <Link href="/" className="hover:text-red-500 transition">
             Home
