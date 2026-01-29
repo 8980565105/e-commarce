@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import {
   X,
   Package,
-  Mail,
-  Phone,
   MapPin,
+  CheckCircle2,
   Loader2,
-  IndianRupee,
+  Clock,
   ChevronRight,
   ChevronLeft,
   Search as SearchIcon,
@@ -42,6 +41,29 @@ export default function AdminOrderPage() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const getStatusBadge = (status) => {
+    const s = status?.toLowerCase();
+    if (s === "paid") {
+      return (
+        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-black uppercase flex items-center gap-1 w-fit">
+          <CheckCircle2 size={12} /> Paid
+        </span>
+      );
+    } else if (s === "cod") {
+      return (
+        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase flex items-center gap-1 w-fit">
+          <Truck size={12} /> Cash On Delivery
+        </span>
+      );
+    } else {
+      return (
+        <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-[10px] font-black uppercase flex items-center gap-1 w-fit">
+          <Clock size={12} /> Pending
+        </span>
+      );
+    }
+  };
 
   // --- SEARCH LOGIC ---
   const filteredOrders = orders.filter((o) => {
@@ -153,6 +175,7 @@ export default function AdminOrderPage() {
                     <th className="p-6 text-[11px] font-black text-gray-400 uppercase tracking-widest">
                       Transaction
                     </th>
+                    <th className="p-6 text-[11px] font-black text-gray-400 uppercase tracking-widest">status</th>
                     <th className="p-6 text-[11px] font-black text-gray-400 uppercase tracking-widest text-right">
                       Action
                     </th>
@@ -191,6 +214,13 @@ export default function AdminOrderPage() {
                           </span>
                         </div>
                       </td>
+
+                      <td className="p-5">
+                        {getStatusBadge(
+                          order.status || order.paymentDetails?.status,
+                        )}
+                      </td>
+
                       <td className="p-6 text-right">
                         <button
                           onClick={() => setSelectedOrder(order)}
@@ -314,6 +344,12 @@ export default function AdminOrderPage() {
                   <p className="text-4xl font-black italic">
                     ₹{selectedOrder.totalAmount}
                   </p>
+                  <span className="p-5">
+                    {getStatusBadge(
+                      selectedOrder.status ||
+                        selectedOrder.paymentDetails?.status,
+                    )}
+                  </span>
                 </div>
               </div>
               <div className="space-y-3">

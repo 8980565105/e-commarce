@@ -13,6 +13,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Card");
   const [clientSecret, setClientSecret] = useState("");
+  const [currentOrderId, setCurrentOrderId] = useState(null);
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -45,11 +46,14 @@ export default function CheckoutPage() {
       fetch("/api/user/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: grandTotal }),
+        body: JSON.stringify({
+          amount: grandTotal,
+          customerEmail: formData.email,
+        }),
       })
         .then((res) => res.json())
         .then((data) => setClientSecret(data.clientSecret))
-        .catch(() => toast.error("payment gaatway error"));
+        .catch(() => toast.error("Payment gateway error"));
     }
   }, [grandTotal, paymentMethod]);
 
@@ -82,22 +86,19 @@ export default function CheckoutPage() {
   const handleOrderSubmit = async () => {
     if (cartItems.length === 0) {
       toast.error("તમારું કાર્ટ ખાલી છે!");
-      return false;
+      return null;
     }
 
     if (!validateForm()) {
-      toast.error("all filde write are true");
-      return false;
+      toast.error("Please fill all details correctly");
+      return null;
     }
 
     setLoading(true);
 
     const orderData = {
       customerInfo: formData,
-      paymentDetails: {
-        method: paymentMethod,
-        status: paymentMethod === "Cash" ? "Pending" : "Paid",
-      },
+      paymentMethod: paymentMethod,
       items: cartItems.map((item) => ({
         productId: item._id,
         title: item.title,
@@ -122,40 +123,55 @@ export default function CheckoutPage() {
       const result = await response.json();
 
       if (result.success) {
+        setCurrentOrderId(result.orderId);
         if (paymentMethod === "Cash") {
           clearCart();
-          toast.success("Order success! 🎉");
+          toast.success("Order Placed (COD)! 🎉");
           router.push("/success");
         }
-        return true;
+        return result.orderId;
       } else {
-        toast.error(result.error || "order not conform");
+        toast.error(result.error || "Order creation failed");
         setLoading(false);
-        return false;
+        return null;
       }
     } catch (error) {
-      toast.error("server connection error");
+      toast.error("Server connection error");
       setLoading(false);
-      return false;
+      return null;
     }
   };
 
   const handleStripePayment = async (stripe, elements) => {
-    const isSaved = await handleOrderSubmit();
+    const orderId = await handleOrderSubmit();
 
-    if (isSaved) {
-      clearCart();
-
-      const { error } = await stripe.confirmPayment({
+    if (orderId) {
+      const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/success`,
         },
+        redirect: "if_required",
       });
 
       if (error) {
         toast.error(error.message);
         setLoading(false);
+      } else if (paymentIntent && paymentIntent.status === "succeeded") {
+        await fetch("/api/user/order", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: orderId,
+            status: "Paid",
+            paymentStatus: "Paid",
+            stripeId: paymentIntent.id,
+          }),
+        });
+
+        clearCart();
+        toast.success("Payment Successful! 🎉");
+        router.push("/success");
       }
     }
   };
@@ -165,7 +181,6 @@ export default function CheckoutPage() {
       <Toaster position="top-center" />
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-8">
-          {/* DELIVERY INFO */}
           <div className="bg-white p-8 rounded-4xl shadow-sm border border-gray-100">
             <h2 className="text-2xl font-black italic uppercase tracking-tighter mb-8 flex items-center gap-2">
               <span className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-xs not-italic">
@@ -285,7 +300,6 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        {/* ORDER SUMMARY */}
         <div className="lg:col-span-1">
           <div className="bg-white p-8 rounded-4xl shadow-sm border border-gray-100 sticky top-10">
             <h2 className="text-xl font-black italic uppercase tracking-tighter mb-6 flex items-center gap-2">

@@ -30,7 +30,6 @@ const OrderSchema = new mongoose.Schema({
   shippingFee: Number,
   tax: Number,
   totalAmount: Number,
-  status: { type: String, default: "Pending" },
   createdAt: { type: Date, default: Date.now },
 });
 
