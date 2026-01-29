@@ -17,7 +17,6 @@ function AllCollectionPage() {
           setCollections(activeOnly);
         }
       } catch (error) {
-        console.error("Error fetching collections:", error);
       } finally {
         setLoading(false);
       }

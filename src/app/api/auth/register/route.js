@@ -18,7 +18,6 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Fetch Users Error:", error);
     return NextResponse.json(
       { success: false, message: "Database Error: " + error.message }, 
       { status: 500 }
@@ -59,7 +58,6 @@ export async function POST(req) {
 
     return NextResponse.json({ message: "Account Created Successfully!", user: newUser }, { status: 201 });
   } catch (error) {
-    console.error("Registration Error:", error);
     return NextResponse.json({ message: "Database Error: " + error.message }, { status: 500 });
   }
 }

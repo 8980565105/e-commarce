@@ -54,7 +54,6 @@ function Page() {
           setCollections(activeCollections.reverse().slice(0, 4));
         }
       } catch (err) {
-        console.error("Collection fetch error", err);
       }
     };
     fetchCollections();
@@ -69,7 +68,6 @@ function Page() {
           setBlogs(data.reverse().slice(0, 3));
         }
       } catch (err) {
-        console.error("Blog fetch error", err);
       }
     };
     fetchBlogs();

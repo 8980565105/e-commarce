@@ -30,15 +30,15 @@ export default function ProductList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [editorLoaded, setEditorLoaded] = useState(false);
 
-  // --- Pagination States ---
+  
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // --- Modal States ---
+ 
   const [isEditing, setIsEditing] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
-  const [isDeleting, setIsDeleting] = useState(false); // Delete Modal State
-  const [deleteId, setDeleteId] = useState(null); // ID to be deleted
+  const [isDeleting, setIsDeleting] = useState(false); 
+  const [deleteId, setDeleteId] = useState(null); 
 
   useEffect(() => {
     setEditorLoaded(true);
@@ -65,7 +65,7 @@ export default function ProductList() {
     fetchData();
   }, [fetchData]);
 
-  // --- Search & Pagination Logic ---
+
   const filteredProducts = products.filter(
     (p) =>
       p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -87,11 +87,11 @@ export default function ProductList() {
     setCurrentPage(1);
   };
 
-  // --- DELETE HANDLER (Final Action) ---
+
   const confirmDelete = async () => {
     if (!deleteId) return;
     const toastId = toast.loading("Deleting product...");
-    setIsDeleting(false); // Modal બંધ કરો
+    setIsDeleting(false); 
 
     try {
       const res = await fetch("/api/admin/product", {
@@ -207,7 +207,6 @@ export default function ProductList() {
     <div className="min-h-screen bg-[#F8FAFC] text-black">
       <Toaster position="top-center" />
 
-      {/* --- DELETE CONFIRMATION MODAL (Center) --- */}
       {isDeleting && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-200 p-4">
           <div className="bg-white rounded-4xl p-8 max-w-sm w-full animate-in zoom-in-95 duration-200 shadow-2xl text-center">
@@ -238,7 +237,6 @@ export default function ProductList() {
         </div>
       )}
 
-      {/* --- EDIT MODAL --- */}
       {isEditing && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100 p-3 md:p-6">
           <div className="bg-white rounded-xl p-6 md:p-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-gray-100">
@@ -412,7 +410,6 @@ export default function ProductList() {
         </div>
       )}
 
-      {/* --- HEADER --- */}
       <div className="mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
@@ -460,7 +457,7 @@ export default function ProductList() {
                 <th className="px-10 py-6">Product Information</th>
                 <th className="px-8 py-6">Category</th>
                 <th className="px-8 py-6">Price</th>
-                <th className="px-8 py-6">Stock</th>
+                <th className="px-8 py-6">variant&Stock</th>
                 <th className="px-8 py-6">Status</th>
                 <th className="px-10 py-6 text-right">Actions</th>
               </tr>
@@ -497,11 +494,24 @@ export default function ProductList() {
                     ₹{product.price}
                   </td>
                   <td className="px-8 py-6">
-                    <div className="flex items-center gap-2 font-black text-gray-600">
-                      {product.variants?.reduce(
-                        (acc, v) => acc + v.stock,
-                        0,
-                      )}{" "}
+                    <div className="flex flex-col gap-1">
+                      {product.variants?.map((v, idx) =>
+                        v.stock > 0 ? (
+                          <span
+                            key={idx}
+                            className="text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded"
+                          >
+                            {v.size} : {v.stock}
+                          </span>
+                        ) : (
+                          <span
+                            key={idx}
+                            className="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded italic"
+                          >
+                            {v.size} : Out of Stock
+                          </span>
+                        ),
+                      )}
                     </div>
                   </td>
                   <td className="px-8 py-6">
@@ -537,7 +547,6 @@ export default function ProductList() {
           </table>
         </div>
 
-        {/* Mobile View */}
         <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
           {currentItems.map((product) => (
             <div
@@ -600,7 +609,6 @@ export default function ProductList() {
           </div>
         )}
 
-        {/* --- PAGINATION --- */}
         {totalPages > 1 && (
           <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest italic">

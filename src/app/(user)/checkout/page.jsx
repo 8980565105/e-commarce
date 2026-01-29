@@ -37,7 +37,7 @@ export default function CheckoutPage() {
     }, 0);
   }, [cartItems]);
 
-  const shipping = calculatedSubtotal > 0 ? 41.0 : 0;
+  const shipping = calculatedSubtotal > 0 ? 100 : 0;
   const taxAmount = calculatedSubtotal > 0 ? calculatedSubtotal * 0.05 : 0;
   const grandTotal = calculatedSubtotal + shipping + taxAmount;
 

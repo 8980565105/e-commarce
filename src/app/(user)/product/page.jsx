@@ -13,7 +13,6 @@ export default function AllProductsPage() {
         const result = await res.json();
         if (result.success) setProducts(result.data);
       } catch (err) {
-        console.error(err);
       } finally {
         setLoading(false);
       }

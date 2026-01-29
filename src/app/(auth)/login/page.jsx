@@ -58,7 +58,6 @@ export default function Login() {
       }
     } catch (err) {
       toast.error("Something went wrong!");
-      console.error(err);
     } finally {
       setLoading(false);
     }

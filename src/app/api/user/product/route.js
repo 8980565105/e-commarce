@@ -5,57 +5,42 @@ import Product from "@/models/product";
 export async function GET(req) {
   try {
     await connectMongoDB();
-
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    const category = searchParams.get("category");
-    const sort = searchParams.get("sort");
-    const search = searchParams.get("search");
 
     if (id) {
-      const product = await Product.findOne({
-        _id: id,
-        status: true,
-      }).populate("category");
+      const product = await Product.findOne({ _id: id, status: true }).populate(
+        "category",
+      );
 
-      if (!product) {
+      if (!product)
         return NextResponse.json(
-          { success: false, error: "Product not found or inactive" },
+          { success: false, error: "Not found" },
           { status: 404 },
         );
-      }
 
-      return NextResponse.json({ success: true, data: product });
+      const activeVariants = product.variants.filter((v) => v.stock > 0);
+
+      const productObj = product.toObject();
+      productObj.variants = activeVariants;
+
+      return NextResponse.json({ success: true, data: productObj });
     }
 
-    let query = { status: true };
-
-    if (category) {
-      query.category = category;
-    }
-
-    if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
-      ];
-    }
-
-    let sortOptions = { createdAt: -1 };
-    if (sort === "price-low") sortOptions = { price: 1 };
-    if (sort === "price-high") sortOptions = { price: -1 };
-
-    const products = await Product.find(query)
+    const products = await Product.find({ status: true })
       .populate("category")
-      .sort(sortOptions);
+      .sort({ createdAt: -1 });
 
-    return NextResponse.json({
-      success: true,
-      count: products.length,
-      data: products,
-    });
+    const filteredProducts = products
+      .map((p) => {
+        const obj = p.toObject();
+        obj.variants = obj.variants.filter((v) => v.stock > 0);
+        return obj;
+      })
+      .filter((p) => p.variants.length > 0);
+
+    return NextResponse.json({ success: true, data: filteredProducts });
   } catch (error) {
-    console.error("User Product Fetch Error:", error);
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 },

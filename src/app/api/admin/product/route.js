@@ -68,7 +68,6 @@ export async function DELETE(req) {
       message: "Product deleted successfully",
     });
   } catch (error) {
-    console.error("Delete API Error:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 },

@@ -35,7 +35,6 @@ async function getBlog(id) {
     const blog = await Blog.findById(id).lean();
     return blog ? JSON.parse(JSON.stringify(blog)) : null;
   } catch (error) {
-    console.error("Database Error:", error);
     return null;
   }
 }

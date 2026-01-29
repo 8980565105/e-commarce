@@ -52,7 +52,6 @@ export async function POST(req) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("Order API Error:", error);
     return NextResponse.json(
       {
         success: false,
@@ -93,7 +92,6 @@ export async function GET(req) {
   try {
     await connectMongoDB();
 
-    // બધ ઓર્ડર્સ ફેચ કરો અને લેટેસ્ટ ઓર્ડર ઉપર આવે તે માટે sort કરો
     const orders = await Order.find().sort({ createdAt: -1 });
 
     return NextResponse.json({
@@ -101,7 +99,6 @@ export async function GET(req) {
       data: orders,
     }, { status: 200 });
   } catch (error) {
-    console.error("Order Fetch Error:", error);
     return NextResponse.json({
       success: false,
       error: "Failed to fetch orders",

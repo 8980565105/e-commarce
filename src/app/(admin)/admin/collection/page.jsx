@@ -55,7 +55,6 @@ export default function CollectionPage() {
         toast.error("Error: " + result.error, { id: toastId });
       }
     } catch (error) {
-      console.error("Submission Error:", error);
       toast.error("Something went wrong while saving data.", { id: toastId });
     } finally {
       setLoading(false);

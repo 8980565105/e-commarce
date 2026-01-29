@@ -18,7 +18,6 @@ export default function BlogListingPage() {
         const data = await res.json();
         setBlogs(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error("Failed to fetch blogs");
       } finally {
         setLoading(false);
       }

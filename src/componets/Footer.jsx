@@ -28,10 +28,8 @@ export default function Footer() {
         if (result.success && Array.isArray(result.data)) {
           setCollections(result.data.slice(0, 5));
         } else {
-          console.error("Data structure mismatch:", result);
         }
       } catch (error) {
-        console.error("Error fetching collections:", error);
       } finally {
         setLoading(false);
       }
