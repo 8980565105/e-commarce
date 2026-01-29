@@ -122,8 +122,8 @@ export default function Footer() {
               <FooterLink href="/contact" label="Contact Us" />
               <FooterLink href="/about" label="About Us" />
               <FooterLink href="/blog" label="Blog" />
-              <FooterLink href="/legal" label="Legal & Privacy" />
-              <FooterLink href="/faqs" label="FAQs" />
+              <FooterLink href="/privacy" label="Legal & Privacy" />
+              <FooterLink href="/faq" label="FAQs" />
             </ul>
           </div>
 

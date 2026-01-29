@@ -178,7 +178,7 @@ function Page() {
 
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4 text-center md:text-left">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4 text-center md:text-left">
             <div>
               <h2 className="text-4xl md:text-5xl font-black text-[#1A2B49] mt-2">
                 Popular Collections

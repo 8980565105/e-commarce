@@ -73,7 +73,7 @@ export default function ContactPage() {
       <Toaster position="top-center" />
 
       {/* HERO SECTION */}
-      <div className="flex flex-col gap-50">
+      <div>
         <section
           className="h-75 bg-cover bg-center flex items-center justify-center text-white"
           style={{
@@ -90,7 +90,7 @@ export default function ContactPage() {
         </section>
 
         {/* FORM SECTION */}
-        <section className="flex justify-center items-center flex-col p-8">
+        <section className="flex justify-center items-center flex-col my-10">
           <h2 className="text-xl font-semibold text-center mb-8">
             Get In Touch With Us
           </h2>
@@ -175,7 +175,7 @@ export default function ContactPage() {
         </section>
 
         {/* MAP SECTION */}
-        <section className="mt-16">
+        <section>
           <iframe
             src="https://www.google.com/maps?q=India&output=embed"
             width="100%"
@@ -185,6 +185,7 @@ export default function ContactPage() {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </section>
+        
       </div>
     </>
   );

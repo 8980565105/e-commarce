@@ -12,6 +12,7 @@ import {
   Package,
   Folders,
   LogOut,
+  Mail,
 } from "lucide-react";
 
 export default function AdminLayout({ children }) {
@@ -50,6 +51,13 @@ export default function AdminLayout({ children }) {
       path: "/admin/allproduct",
       icon: <Package size={20} />,
     },
+    {
+      id: "contact",
+      label: "Contact",
+      path: "/admin/contact",
+      icon: <Mail size={20}/>
+    
+    }
   ];
 
   const toggleSidebar = () => setIsOpen(!isOpen);
