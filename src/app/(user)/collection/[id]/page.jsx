@@ -104,7 +104,7 @@ function CollectionDetailPage() {
               {currentProducts.map((product) => (
                 <div
                   key={product._id}
-                  className="group border border-transparent hover:border-gray-100 p-2 transition-all"
+                  className="group border-2 border-transparent hover:border-gray-100 transition-all"
                 >
                   <Link href={`/product/${product._id}`}>
                     <div className="relative h-96 overflow-hidden bg-gray-100 shadow-sm transition-all duration-500">
@@ -116,7 +116,7 @@ function CollectionDetailPage() {
                     </div>
                   </Link>
 
-                  <div className="mt-6">
+                  <div className="mt-6 p-2">
                     <Link href={`/product/${product._id}`}>
                       <h3 className="text-xl font-black text-gray-800 group-hover:text-red-500 transition-colors uppercase truncate">
                         {product.title}
