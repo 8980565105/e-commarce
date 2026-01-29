@@ -50,7 +50,7 @@ export default function UserHeader() {
   useEffect(() => {
     checkAuth();
     setShowDropdown(false);
-    setIsMobileMenuOpen(false); // Link click thaya pachi mobile menu bandh thai jase
+    setIsMobileMenuOpen(false); 
   }, [pathname]);
 
   const handleLogout = () => {
@@ -74,7 +74,6 @@ export default function UserHeader() {
       <Toaster position="top-center" />
 
       <div className="max-w-7xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
-        {/* Left Side: Mobile Menu Button & Logo */}
         <div className="flex items-center gap-4">
           <button
             className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-md transition"
@@ -87,7 +86,6 @@ export default function UserHeader() {
           </Link>
         </div>
 
-        {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center gap-10 text-[#1A2B49] font-bold uppercase tracking-widest text-sm">
           <Link href="/" className="hover:text-red-500 transition">
             Home
@@ -103,7 +101,6 @@ export default function UserHeader() {
           </Link>
         </div>
 
-        {/* Right Side: User Dropdown & Cart */}
         <div className="flex items-center gap-2 md:gap-5">
           <div className="relative">
             <button
@@ -189,14 +186,11 @@ export default function UserHeader() {
         </div>
       </div>
 
-      {/* --- MOBILE SIDEBAR MENU --- */}
-      {/* Background Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 transition-opacity z-110 lg:hidden ${isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={() => setIsMobileMenuOpen(false)}
       />
 
-      {/* Sidebar Content */}
       <div
         className={`fixed top-0 left-0 h-full w-70 bg-white z-120 transform transition-transform duration-300 ease-in-out lg:hidden ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
@@ -243,7 +237,6 @@ export default function UserHeader() {
           </Link>
         </div>
 
-        {/* User Status in Mobile Menu */}
         {!user && (
           <div className="absolute bottom-0 w-full p-6 border-t bg-gray-50">
             <Link
