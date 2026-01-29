@@ -331,6 +331,7 @@ export default function ProductList() {
                 </label>
                 <input
                   type="number"
+                  min="0"
                   className="w-full p-4 bg-blue-50/50 rounded-2xl font-black text-blue-600 text-xl outline-none border-2 border-transparent focus:border-blue-500/20"
                   value={editProduct.price}
                   onChange={(e) =>
@@ -355,6 +356,7 @@ export default function ProductList() {
                         <input
                           className="w-full bg-white p-3 rounded-xl font-bold text-sm outline-none border border-gray-100"
                           value={v.size}
+                          min="0"
                           onChange={(e) =>
                             updateVariant(i, "size", e.target.value)
                           }
@@ -368,6 +370,7 @@ export default function ProductList() {
                           type="number"
                           className="w-full bg-white p-3 rounded-xl font-bold text-sm outline-none border border-gray-100"
                           value={v.stock}
+                          min="0"
                           onChange={(e) =>
                             updateVariant(i, "stock", Number(e.target.value))
                           }
@@ -379,6 +382,7 @@ export default function ProductList() {
                         </p>
                         <input
                           type="number"
+                          min="0"
                           className="w-full bg-white p-3 rounded-xl font-black text-sm text-blue-600 outline-none border border-gray-100"
                           value={v.variantPrice || ""}
                           onChange={(e) =>
