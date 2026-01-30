@@ -7,6 +7,7 @@ import {
   Menu,
   X,
   ShoppingCart,
+  LayoutDashboard,
   PackagePlus,
   Users,
   Package,
@@ -21,6 +22,12 @@ export default function AdminLayout({ children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      path: "/admin/dashboard",
+      icon: <LayoutDashboard size={20} />,
+    },
     {
       id: "users",
       label: "Users",
@@ -87,7 +94,7 @@ export default function AdminLayout({ children }) {
       `}
       >
         <div className="flex items-center justify-between p-6 border-b border-slate-700">
-          <Link href="/admin/user">
+          <Link href="/admin/dashboard">
             <span className="text-xl font-black tracking-tighter text-white">
               ADMIN PANEL
             </span>

@@ -87,7 +87,6 @@ export default function UserHeader() {
           </Link>
         </div>
 
-        {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center gap-10 text-[#1A2B49] font-bold uppercase tracking-widest text-sm">
           <Link href="/" className="hover:text-red-500 transition">
             Home
@@ -155,7 +154,7 @@ export default function UserHeader() {
                     </div>
                     {user.role === "admin" && (
                       <Link
-                        href="/admin/user"
+                        href="/admin/dashboard"
                         className="block px-5 py-2.5 text-blue-600 font-bold text-xs hover:bg-blue-50 transition"
                         onClick={() => setShowDropdown(false)}
                       >
