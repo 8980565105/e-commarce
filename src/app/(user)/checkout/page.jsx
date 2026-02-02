@@ -85,7 +85,7 @@ export default function CheckoutPage() {
 
   const handleOrderSubmit = async () => {
     if (cartItems.length === 0) {
-      toast.error("તમારું કાર્ટ ખાલી છે!");
+      toast.error("your cart is empty! ");
       return null;
     }
 
