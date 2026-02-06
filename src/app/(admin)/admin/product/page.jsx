@@ -1,5 +1,3 @@
-
-
 "use client";
 import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -41,7 +39,7 @@ export default function ProductForm({ editData = null, onComplete }) {
   useEffect(() => {
     setEditorLoaded(true);
     const fetchCats = async () => {
-      const res = await fetch("/api/admin/collection");
+      const res = await fetch("/api/admin/subcategory");
       const result = await res.json();
       if (result.success) setCollections(result.data);
     };
@@ -85,7 +83,10 @@ export default function ProductForm({ editData = null, onComplete }) {
   const addVariant = () =>
     setFormData({
       ...formData,
-      variants: [...formData.variants, { size: "", stock: 0, variantPrice: "" }],
+      variants: [
+        ...formData.variants,
+        { size: "", stock: 0, variantPrice: "" },
+      ],
     });
 
   const removeVariant = (index) => {
@@ -279,7 +280,7 @@ export default function ProductForm({ editData = null, onComplete }) {
             <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
               Collection
             </label>
-            <select
+            {/* <select
               className="w-full p-4 md:p-5 bg-gray-50 rounded-2xl font-bold border-none outline-none mt-2 appearance-none text-gray-600 cursor-pointer"
               value={formData.category}
               onChange={(e) =>
@@ -288,6 +289,21 @@ export default function ProductForm({ editData = null, onComplete }) {
               required
             >
               <option value="">Choose Collection</option>
+              {collections.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.title}
+                </option>
+              ))}
+            </select> */}
+            <select
+             className="w-full p-4 md:p-5 bg-gray-50 rounded-2xl font-bold border-none outline-none mt-2 appearance-none text-gray-600 cursor-pointer"
+              value={formData.category}
+              onChange={(e) =>
+                setFormData({ ...formData, category: e.target.value })
+              }
+            >
+              <option value="">Choose Collection</option>
+
               {collections.map((cat) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.title}
@@ -331,7 +347,9 @@ export default function ProductForm({ editData = null, onComplete }) {
                     placeholder="XL, 42, etc."
                     className="w-full p-4 text-black rounded-xl font-bold outline-none border border-gray-200 focus:border-blue-500 transition-all mt-1"
                     value={v.size}
-                    onChange={(e) => updateVariant(index, "size", e.target.value)}
+                    onChange={(e) =>
+                      updateVariant(index, "size", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -357,7 +375,9 @@ export default function ProductForm({ editData = null, onComplete }) {
                     type="number"
                     className="w-full p-4 text-black rounded-xl font-bold outline-none border border-gray-200 focus:border-blue-500 transition-all mt-1"
                     value={v.stock}
-                    onChange={(e) => updateVariant(index, "stock", e.target.value)}
+                    onChange={(e) =>
+                      updateVariant(index, "stock", e.target.value)
+                    }
                     required
                   />
                 </div>

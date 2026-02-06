@@ -15,6 +15,7 @@ export default function Dashboard() {
     totalUsers: 0,
     totalOrders: 0,
     totalCollections: 0,
+    totalSubCollections: 0,
     totalProducts: 0,
     totalBlogs: 0,
     totalContacts: 0,
@@ -86,8 +87,16 @@ export default function Dashboard() {
       path: "/admin/order",
     },
     {
-      label: "Total Collections",
+      label: "Total category",
       value: stats.totalCollections,
+      icon: LayoutGrid,
+      bgColor: "bg-green-100",
+      iconColor: "text-green-600",
+      path: "/admin/allcollection",
+    },
+     {
+      label: "Total sub category",
+      value: stats.totalSubCollections,
       icon: LayoutGrid,
       bgColor: "bg-green-100",
       iconColor: "text-green-600",
@@ -117,6 +126,7 @@ export default function Dashboard() {
       iconColor: "text-yellow-600",
       path: "/admin/contact",
     },
+    
   ];
 
   return (

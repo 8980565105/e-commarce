@@ -48,7 +48,7 @@ export default function ProductList() {
     try {
       const [prodRes, colRes] = await Promise.all([
         fetch("/api/admin/product"),
-        fetch("/api/admin/collection"),
+        fetch("/api/admin/subcategory"),
       ]);
       const prodData = await prodRes.json();
       const colData = await colRes.json();
